@@ -26,15 +26,13 @@
     @apply underline decoration-slate-300 hover:decoration-ink-500;
   }
   .card {
-    @apply bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-subtle hover:shadow-md transition;
+    @apply bg-white/80 backdrop-blur-sm rounded-2xl transition shadow-none;
   }
 }
 
 /* Utilities */
 @layer utilities {
   .site-bg {
-    @apply min-h-screen;
-    /* Soft off-white gradient */
-    background: linear-gradient(180deg, #fbfcfe 0%, #f6f8fb 100%);
+    @apply min-h-screen bg-white;
   }
 }
