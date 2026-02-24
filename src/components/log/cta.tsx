@@ -207,6 +207,37 @@ export default function WriteNoteCTA() {
     }
   };
 
+  const getCameraErrorMessage = (error: unknown) => {
+    if (!window.isSecureContext) {
+      return "camera unavailable — use https on deployment";
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      return "camera unavailable — browser does not support camera access here";
+    }
+
+    if (error instanceof DOMException) {
+      switch (error.name) {
+        case "NotAllowedError":
+        case "SecurityError":
+          return "camera blocked — allow camera permission for this site";
+        case "NotFoundError":
+        case "DevicesNotFoundError":
+          return "no camera detected on this device";
+        case "NotReadableError":
+        case "TrackStartError":
+          return "camera is busy — close other apps using it";
+        case "OverconstrainedError":
+        case "ConstraintNotSatisfiedError":
+          return "camera settings unsupported — retrying with default camera";
+        default:
+          return `camera unavailable — ${error.name}`;
+      }
+    }
+
+    return "camera unavailable — allow webcam access to take selfie";
+  };
+
   const stepConent = (
     step: number,
     videoElmRef: React.RefObject<HTMLVideoElement | null>
@@ -409,12 +440,45 @@ export default function WriteNoteCTA() {
 
   useEffect(() => {
     const startCamera = async () => {
+      stopCamera();
+      setAsciiPreview("");
+      setCameraError(null);
+
+      if (!window.isSecureContext) {
+        setCameraError("camera unavailable — use https on deployment");
+        return;
+      }
+
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setCameraError(
+          "camera unavailable — browser does not support camera access here"
+        );
+        return;
+      }
+
+      const fallbackConstraints: MediaStreamConstraints[] = [
+        { video: { facingMode: { ideal: "user" } }, audio: false },
+        { video: true, audio: false },
+      ];
+
+      let stream: MediaStream | null = null;
+      let lastError: unknown = null;
+
+      for (const constraints of fallbackConstraints) {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia(constraints);
+          break;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      if (!stream) {
+        setCameraError(getCameraErrorMessage(lastError));
+        return;
+      }
+
       try {
-        setCameraError(null);
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user" },
-          audio: false,
-        });
         streamRef.current = stream;
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
@@ -424,8 +488,9 @@ export default function WriteNoteCTA() {
           const ascii = convertVideoFrameToAscii();
           if (ascii) setAsciiPreview(ascii);
         }, 125);
-      } catch {
-        setCameraError("camera unavailable — allow webcam access to take selfie");
+      } catch (error) {
+        stopCamera();
+        setCameraError(getCameraErrorMessage(error));
       }
     };
 
