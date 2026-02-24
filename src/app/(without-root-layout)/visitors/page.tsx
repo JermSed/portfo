@@ -118,13 +118,50 @@ const Page = () => {
                     "drop-shadow(0 0 0 white) drop-shadow(1px 0 0 white) drop-shadow(-1px 0 0 white) drop-shadow(0 1px 0 white) drop-shadow(0 -1px 0 white) drop-shadow(0 2px 3px rgba(0,0,0,0.22))",
                 }}
               />
-            </Sticker>  
+            </Sticker>
+            <Sticker>
+              <img
+                className="w-36"
+                src="/images/ctcsticker1.png"
+                alt="ctc sticker"
+                draggable={false}
+                style={{
+                  filter:
+                    "drop-shadow(0 0 0 white) drop-shadow(1px 0 0 white) drop-shadow(-1px 0 0 white) drop-shadow(0 1px 0 white) drop-shadow(0 -1px 0 white) drop-shadow(0 2px 3px rgba(0,0,0,0.22))",
+                }}
+              />
+            </Sticker> 
+            <Sticker>
+              <img
+                className="w-36"
+                src="/images/ctcsticker2.png"
+                alt="frog sticker"
+                draggable={false}
+                style={{
+                  filter:
+                    "drop-shadow(0 0 0 white) drop-shadow(1px 0 0 white) drop-shadow(-1px 0 0 white) drop-shadow(0 1px 0 white) drop-shadow(0 -1px 0 white) drop-shadow(0 2px 3px rgba(0,0,0,0.22))",
+                }}
+              />
+            </Sticker> 
+            <Sticker>
+              <img
+                className="w-36"
+                src="/images/ctctree.png"
+                alt="frog sticker"
+                draggable={false}
+                style={{
+                  filter:
+                    "drop-shadow(0 0 0 white) drop-shadow(1px 0 0 white) drop-shadow(-1px 0 0 white) drop-shadow(0 1px 0 white) drop-shadow(0 -1px 0 white) drop-shadow(0 2px 3px rgba(0,0,0,0.22))",
+                }}
+              />
+            </Sticker>   
             <Sticker>
               <VercelLogo />
             </Sticker>
             <Sticker>
               <NextWordmark />
             </Sticker>
+
 
             <Link
               href="/"
