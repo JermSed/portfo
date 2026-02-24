@@ -32,6 +32,7 @@ export default function WriteNoteCTA() {
   const ASCII_CONTRAST = 1.5;
   const ASCII_GAMMA = 0.9;
   const ASCII_BRIGHTNESS = 6;
+  const ASCII_CHAR_ASPECT_RATIO = 0.62;
 
   const [step, setStep] = useState<number>(0);
   const [contentRef, { height: heightContent }] = useMeasure();
@@ -96,23 +97,25 @@ export default function WriteNoteCTA() {
     canvas.width = width;
     canvas.height = height;
 
-    // Preserve proportions using "cover" behavior so ascii fills the whole box.
+    // Preserve proportions using "contain" behavior and account for character cell shape.
     const sourceAspect = video.videoWidth / video.videoHeight;
-    const targetAspect = width / height;
-    let sx = 0;
-    let sy = 0;
-    let sWidth = video.videoWidth;
-    let sHeight = video.videoHeight;
+    const targetAspect = (width * ASCII_CHAR_ASPECT_RATIO) / height;
+    let drawWidth = width;
+    let drawHeight = height;
+    let dx = 0;
+    let dy = 0;
 
     if (sourceAspect > targetAspect) {
-      sWidth = video.videoHeight * targetAspect;
-      sx = (video.videoWidth - sWidth) / 2;
+      drawHeight = Math.max(1, Math.floor((width * ASCII_CHAR_ASPECT_RATIO) / sourceAspect));
+      dy = Math.floor((height - drawHeight) / 2);
     } else if (sourceAspect < targetAspect) {
-      sHeight = video.videoWidth / targetAspect;
-      sy = (video.videoHeight - sHeight) / 2;
+      drawWidth = Math.max(1, Math.floor((height * sourceAspect) / ASCII_CHAR_ASPECT_RATIO));
+      dx = Math.floor((width - drawWidth) / 2);
     }
 
-    context.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, width, height);
+    context.fillStyle = "#000";
+    context.fillRect(0, 0, width, height);
+    context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, dx, dy, drawWidth, drawHeight);
 
     const { data } = context.getImageData(0, 0, width, height);
     let output = "";
@@ -269,7 +272,7 @@ export default function WriteNoteCTA() {
             <canvas ref={canvasRef} className="hidden" />
             <pre
               ref={asciiPreRef}
-              className="h-52 w-full overflow-hidden whitespace-pre rounded-[4px] border border-white/40 bg-black/80 p-0.5 font-mono text-[5px] leading-[5px] text-white"
+              className="h-52 w-full overflow-hidden whitespace-pre rounded-[4px] border border-white/40 bg-black/80 p-0.5 font-mono text-[4px] leading-[4px] text-white"
             >
               {cameraError
                 ? cameraError
@@ -405,7 +408,7 @@ export default function WriteNoteCTA() {
       if (!pre) return;
 
       const styles = window.getComputedStyle(pre);
-      const fontSize = Number.parseFloat(styles.fontSize) || 5;
+      const fontSize = Number.parseFloat(styles.fontSize) || 4;
       const lineHeight = Number.parseFloat(styles.lineHeight) || fontSize;
 
       // Slightly oversample to better fill the preview box.
