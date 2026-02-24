@@ -29,6 +29,22 @@ const experience = [
     highlight:
       "Shipped a dynamic messaging API for Amazon Fresh that reduced checkout latency by 22%.",
   },
+  {
+    company: "CodeTheChange",
+    role: "Technical Lead, VP of Events, & Developer",
+    period: "Sep 2023 - Present",
+    year: "2023-2027",
+    logo: "/images/codethechange.jpeg",
+    highlight: "Studying computer engineering and computer science at USC.",
+  },
+  {
+    company: "USCLavaLab",
+    role: "Technical Co-Founder & Mentor",
+    period: "Sep 2024 - Present",
+    year: "2024-2027",
+    logo: "/images/lava.jpg",
+    highlight: "Studying computer engineering and computer science at USC.",
+  },
 ];
 
 const projects = [
@@ -110,11 +126,11 @@ export default function HomePage() {
           <h2 className="mb-5 text-xs font-semibold tracking-[0.18em] text-zinc-500 uppercase">
             experience
           </h2>
-          <div className="overflow-hidden rounded-xl border border-zinc-200">
+          <div>
             {experience.map((job) => (
               <article
                 key={`${job.company}-${job.period}`}
-                className="flex items-center justify-between gap-4 border-b border-zinc-200 px-4 py-3 last:border-b-0"
+                className="flex items-center justify-between gap-4 border-b border-zinc-200 py-3 last:border-b-0"
               >
                 <div className="flex min-w-0 items-center gap-3">
                   <Image
@@ -122,7 +138,7 @@ export default function HomePage() {
                     alt={`${job.company} logo`}
                     width={26}
                     height={26}
-                    className="h-6 w-6 rounded-sm border border-zinc-200 object-cover"
+                    className="h-6 w-6 rounded-sm object-cover"
                   />
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-zinc-900">{job.company}</p>
