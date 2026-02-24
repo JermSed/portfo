@@ -1,26 +1,19 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
+import {
+  boolean,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
-import { index, pgTableCreator } from "drizzle-orm/pg-core";
-
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-export const createTable = pgTableCreator((name) => `portfo_${name}`);
-
-export const posts = createTable(
-  "post",
-  (d) => ({
-    id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-    name: d.varchar({ length: 256 }),
-    createdAt: d
-      .timestamp({ withTimezone: true })
-      .$defaultFn(() => /* @__PURE__ */ new Date())
-      .notNull(),
-    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
-  }),
-  (t) => [index("name_idx").on(t.name)],
-);
+export const guestbook = pgTable("guestbook", {
+  id: serial("id").primaryKey(),
+  createdBy: text("created_by").notNull(),
+  body: text("body").notNull(),
+  lastModified: timestamp("last_modified", { withTimezone: false }).notNull(),
+  signature: text("signature").notNull(),
+  approved: boolean("approved").default(false).notNull(),
+  hascreatedentrybefore: text("hascreatedentrybefore"),
+  localCreatedById: text("local_created_by_id"),
+  localEntryId: text("local_entry_id"),
+});
