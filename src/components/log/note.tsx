@@ -40,10 +40,10 @@ const Note = React.memo(
           initial={{ opacity: 0, y: 2 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="relative h-[188px] w-[148px] rounded-[3px] border border-black/15 bg-[#f9f9f5] p-2 pb-10 text-black shadow-[0_10px_18px_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.15)] transition-shadow duration-300 ease-out hover:shadow-[0_16px_24px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.2)]"
+          className="relative min-h-[188px] w-[148px] rounded-[3px] border border-black/15 bg-[#f9f9f5] p-2 text-black shadow-[0_10px_18px_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.15)] transition-shadow duration-300 ease-out hover:shadow-[0_16px_24px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.2)]"
         >
           {signature ? (
-            <div className="relative h-full overflow-hidden border border-black/10 bg-black">
+            <div className="relative h-[130px] overflow-hidden border border-black/10 bg-black">
               {isSvgSignature && signatureSvgDataUri ? (
                 <img
                   src={signatureSvgDataUri}
@@ -58,12 +58,12 @@ const Note = React.memo(
               )}
             </div>
           ) : null}
-          <div className="pointer-events-none absolute right-0 bottom-3 left-0 px-2">
+          <div className="pointer-events-none mt-2 px-2 pb-2">
             <div
-              className={`${permanentMarker.className} rotate-[-1deg] text-[14px] leading-[1.05] tracking-[0.01em] text-black/90`}
+              className={`${permanentMarker.className} -rotate-1 text-[14px] leading-[1.05] tracking-[0.01em] text-black/90`}
             >
               <p className="truncate">{name}</p>
-              <p className="line-clamp-2">{content}</p>
+              <p className="whitespace-pre-wrap wrap-break-word">{content}</p>
             </div>
           </div>
         </motion.div>

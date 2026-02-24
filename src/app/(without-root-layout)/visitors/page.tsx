@@ -86,9 +86,13 @@ const Page = () => {
             <Sticker>
               <img
                 className="w-36"
-                src="/images/spiderman.png"
+                src="/images/supabase.webp"
                 alt="Spiderman sticker"
                 draggable={false}
+                style={{
+                  filter:
+                    "drop-shadow(0 0 0 white) drop-shadow(1px 0 0 white) drop-shadow(-1px 0 0 white) drop-shadow(0 1px 0 white) drop-shadow(0 -1px 0 white) drop-shadow(0 2px 3px rgba(0,0,0,0.22))",
+                }}
               />
             </Sticker>
             <Sticker>
@@ -97,6 +101,10 @@ const Page = () => {
                 src="/images/smile.png"
                 alt="smile sticker"
                 draggable={false}
+                style={{
+                  filter:
+                    "drop-shadow(0 0 0 white) drop-shadow(1px 0 0 white) drop-shadow(-1px 0 0 white) drop-shadow(0 1px 0 white) drop-shadow(0 -1px 0 white) drop-shadow(0 2px 3px rgba(0,0,0,0.22))",
+                }}
               />
             </Sticker>
             <Sticker>
