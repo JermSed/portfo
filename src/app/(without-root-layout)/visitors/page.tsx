@@ -4,8 +4,8 @@ import Polaroid from "@/components/log/polaroid";
 import WriteNoteCTA from "@/components/log/cta";
 import Link from "next/link";
 import { VercelLogo, Sticker, NextWordmark } from "@/components/log/stickers";
-import Image from "next/image";
 import GuestbookEntries from "@/components/log/guestbook-entries";
+import StickyTodoNote from "@/components/log/sticky-todo-note";
 export const dynamic = "force-dynamic";
 
 const Page = () => {
@@ -14,64 +14,62 @@ const Page = () => {
       <div className={cn("h-dvh sm:h-screen bg-white p-1 sm:p-6")}>
         <div
           id="mat-container"
-          className="relative h-full w-full overflow-hidden rounded-[10px] bg-[#5b677a] shadow-[0_4px_8px_rgba(0,0,0,0.2),0_8px_16px_rgba(0,0,0,0.2),0_16px_32px_rgba(0,0,0,0.2)]"
+          className="relative h-full w-full overflow-hidden rounded-[10px] bg-[#c5d0d9] shadow-[0_22px_50px_rgba(0,0,0,0.3),0_9px_18px_rgba(0,0,0,0.22)]"
+          style={{
+            backgroundImage:
+              "linear-gradient(180deg, rgba(212,221,229,0.95) 0%, rgba(197,209,219,0.96) 52%, rgba(183,196,207,0.98) 100%), radial-gradient(circle at 84% 10%, rgba(35,45,58,0.16) 0%, rgba(35,45,58,0.08) 30%, rgba(35,45,58,0.03) 48%, rgba(35,45,58,0) 68%), radial-gradient(circle at 14% 82%, rgba(240,248,255,0.3) 0%, rgba(240,248,255,0) 44%)",
+            backgroundSize: "100% 100%, 100% 100%, 100% 100%",
+            backgroundPosition: "center, center, center",
+            backgroundRepeat: "no-repeat, no-repeat, no-repeat",
+          }}
         >
-          <div className="pointer-events-none absolute inset-0 rounded-[10px] shadow-[inset_0_0_0_1.5px_#fff6]" />
+          <div className="pointer-events-none absolute inset-0 rounded-[10px] shadow-[inset_0_0_0_1.5px_rgba(255,255,255,0.14)]" />
           <div className="z-10">
             <div
-              id="mat-texture"
-              className="pointer-events-none absolute inset-0 opacity-75 mix-blend-overlay"
-              style={{
-                background:
-                  "linear-gradient(45deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%), url(/noise.svg)",
-              }}
-            />
-            <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-[10000] rounded-[10px] opacity-30"
+              className="pointer-events-none absolute inset-0 rounded-[10px] opacity-9 mix-blend-soft-light"
               style={{
-                backgroundImage: "url(/images/Layer-88.png)",
+                backgroundImage: "url(/images/wood-desk.png)",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
+                filter: "grayscale(0.95) saturate(0.45)",
               }}
             />
             <div
-              aria-hidden
-              className="absolute bottom-[3.5vmin] left-[5vmin] h-[11vmin] w-[11vmin] -rotate-[15deg] mix-blend-hard-light [filter:invert(60%)_blur(0.6px)]"
-            >
-              <Image
-                alt="star drawing"
-                width={80}
-                height={80}
-                src="/images/Star_002.png"
-              />
-            </div>
+              id="mat-texture"
+              className="pointer-events-none absolute inset-0 opacity-45 mix-blend-overlay"
+              style={{
+                background: "url(/noise.svg)",
+              }}
+            />
             <div
               id="mat-grid"
-              className="absolute inset-0 m-2 rounded-6 border border-black/20 sm:m-[30px]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.2) 1px, transparent 1px)",
-                backgroundSize: "2vmin 2vmin",
-                backgroundPosition: "center",
-              }}
-            >
-              <div
-                id="diagonal-lines"
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(45deg, transparent 49.5%, rgba(255,255,255,0.28) 49.5%, rgba(255,255,255,0.28) 50.5%, transparent 50.5%), linear-gradient(-45deg, transparent 49.5%, rgba(255,255,255,0.28) 49.5%, rgba(255,255,255,0.28) 50.5%, transparent 50.5%)",
-                  backgroundSize: "10vmin 10vmin",
-                  backgroundPosition: "center",
-                }}
-              />
-            </div>
+              className="absolute inset-0 m-2 rounded-6 border border-transparent sm:m-[30px]"
+            />
           </div>
           <main className="relative z-20 h-full w-full">
-            <div className="absolute top-[5vmin] right-[5vmin] flex h-[11vmin] w-[11vmin] rotate-[15deg] items-center justify-center rounded-full border-2 border-white/50 text-center text-[1.25vmin] font-semibold tracking-[-0.05px] text-white/50 uppercase [word-spacing:1vmin]">
-              <span>made with ❤️ in los angeles</span>
+            {/* <div
+              aria-hidden
+              className="pointer-events-none absolute bottom-[4.2vmin] left-[4.2vmin] z-0 h-[10.5vmin] w-[10.5vmin] -rotate-12 mix-blend-multiply"
+              style={{
+                backgroundImage: "url(/images/Star_002.png)",
+                backgroundSize: "contain",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                filter: "grayscale(1) sepia(0.45) brightness(0.5) contrast(1.2)",
+                opacity: 0.38,
+              }}
+            /> */}
+            <div
+              className="absolute right-[4vmin] bottom-[4vmin] text-right text-[1.2vmin] font-semibold tracking-[0.04em] text-[#2a1a10]/45 uppercase [word-spacing:0.45vmin]"
+              style={{
+                textShadow:
+                  "0 0.07vmin 0 rgba(0,0,0,0.25), 0 -0.03vmin 0 rgba(255,255,255,0.08)",
+              }}
+            >
+              <span>made with love in los angeles {"<3"}</span>
             </div>
+            <StickyTodoNote />
 
             <GuestbookEntries />
             <Polaroid src="/images/yos1.jpg" alt="banff" caption="lost stranger" />
@@ -173,6 +171,15 @@ const Page = () => {
             </Link>
             <WriteNoteCTA />
           </main>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-60 rounded-[10px] opacity-24 mix-blend-multiply"
+            style={{
+              backgroundImage: "url(/images/Layer-88.png)",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
         </div>
       </div>
     </Provider>
