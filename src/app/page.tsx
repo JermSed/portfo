@@ -45,6 +45,14 @@ const experience = [
     logo: "/images/lava.jpg",
     highlight: "Studying computer engineering and computer science at USC.",
   },
+  {
+    company: "Colorstack",
+    role: "Member",
+    period: "2023 - Present",
+    year: "2023-2027",
+    logo: "/images/colorstack.png",
+    highlight: "Studying computer engineering and computer science at USC.",
+  },
 ];
 
 const projects = [
