@@ -14,7 +14,7 @@ const Page = () => {
       <div className={cn("h-dvh sm:h-screen bg-white p-1 sm:p-6")}>
         <div
           id="mat-container"
-          className="relative h-full w-full overflow-hidden rounded-[10px] bg-[#4a3522] shadow-[0_4px_8px_rgba(0,0,0,0.2),0_8px_16px_rgba(0,0,0,0.2),0_16px_32px_rgba(0,0,0,0.2)]"
+          className="relative h-full w-full overflow-hidden rounded-[10px] bg-[#5b677a] shadow-[0_4px_8px_rgba(0,0,0,0.2),0_8px_16px_rgba(0,0,0,0.2),0_16px_32px_rgba(0,0,0,0.2)]"
         >
           <div className="pointer-events-none absolute inset-0 rounded-[10px] shadow-[inset_0_0_0_1.5px_#fff6]" />
           <div className="z-10">
