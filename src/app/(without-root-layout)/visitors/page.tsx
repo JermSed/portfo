@@ -80,7 +80,6 @@ const Page = () => {
             <Polaroid src="/images/catalina1.jpg" alt="nyc" caption="pretty houses" />
             <Polaroid src="/images/catalina2.jpg" alt="nyc" caption="so much flare" />
             <Polaroid src="/images/ctc.jpg" alt="nyc" caption="ctc eboard <3" />
-            {/* <Polaroid src="/images/catalina3.jpg" alt="nyc" caption="pretty building" /> */}
             <Polaroid src="/images/catalina4.jpg" alt="nyc" caption="Andrew aura farming" />
             <Polaroid src="/images/catalina5.jpg" alt="nyc" caption="boys skipping rocks" />
 
@@ -90,6 +89,26 @@ const Page = () => {
                 src="/images/spiderman.png"
                 alt="Spiderman sticker"
                 draggable={false}
+              />
+            </Sticker>
+            <Sticker>
+              <img
+                className="w-36"
+                src="/images/smile.png"
+                alt="smile sticker"
+                draggable={false}
+              />
+            </Sticker>
+            <Sticker>
+              <img
+                className="w-36"
+                src="/images/frog.png"
+                alt="frog sticker"
+                draggable={false}
+                style={{
+                  filter:
+                    "drop-shadow(0 0 0 white) drop-shadow(1px 0 0 white) drop-shadow(-1px 0 0 white) drop-shadow(0 1px 0 white) drop-shadow(0 -1px 0 white) drop-shadow(0 2px 3px rgba(0,0,0,0.22))",
+                }}
               />
             </Sticker>  
             <Sticker>
