@@ -76,6 +76,7 @@ const Drag = React.memo(
       const velocity = Math.min(Math.abs(info.velocity.x), 1);
       controls.start({
         rotate: Math.floor(initialRotate + velocity * 40 * direction),
+        scale: 1,
         transition: {
           type: "spring",
           stiffness: 50,
@@ -91,6 +92,16 @@ const Drag = React.memo(
         ref={elementRef}
         drag
         dragElastic={0.2}
+        whileTap={{
+          rotate: 0,
+          scale: 1.04,
+          y: -10,
+          transition: {
+            type: "spring",
+            stiffness: 260,
+            damping: 24,
+          },
+        }}
         className={cn(
           "select-none w-fit h-fit drag-elements absolute",
           className
