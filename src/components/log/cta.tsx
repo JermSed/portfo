@@ -29,9 +29,9 @@ const transition: Transition = {
 
 export default function WriteNoteCTA() {
   const ASCII_CHARS = " .'`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
-  const ASCII_CONTRAST = 1.5;
-  const ASCII_GAMMA = 0.9;
-  const ASCII_BRIGHTNESS = 6;
+  const ASCII_CONTRAST = 1.8;
+  const ASCII_GAMMA = 1.05;
+  const ASCII_BRIGHTNESS = 10;
   const ASCII_CHAR_ASPECT_RATIO = 0.62;
 
   const [step, setStep] = useState<number>(0);
@@ -52,7 +52,7 @@ export default function WriteNoteCTA() {
   );
   const [localCreatedById, setLocalCreatedById] = useAtom(localCreatedByIdAtom);
 
-  const buttonText = ["Write me a note", "Next", "Submit", "Thanks!"][step];
+  const buttonText = ["Take an ASCII polaroid", "Next", "Submit", "Thanks!"][step];
 
   const ref = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -248,25 +248,6 @@ export default function WriteNoteCTA() {
     switch (step) {
       case 1:
         return (
-          <fieldset className="flex flex-col gap-y-4 p-2">
-            <Field
-              label="ur name, handle, something"
-              value={formInfo.created_by}
-              name="created_by"
-              placeholder="john doe"
-              onChange={handleCreatedByChange}
-            />
-            <Field
-              label="a sweet note"
-              value={formInfo.entry}
-              name="entry"
-              placeholder="xyz"
-              onChange={handleEntryChange}
-            />
-          </fieldset>
-        );
-      case 2:
-        return (
           <div className="relative flex flex-col overflow-hidden rounded-md border border-white/50 bg-black/25 p-2">
             <video ref={videoElmRef} className="hidden" autoPlay muted playsInline />
             <canvas ref={canvasRef} className="hidden" />
@@ -293,6 +274,25 @@ export default function WriteNoteCTA() {
             </button>
           </div>
         );
+      case 2:
+        return (
+          <fieldset className="flex flex-col gap-y-4 p-2">
+            <Field
+              label="ur name, handle, something"
+              value={formInfo.created_by}
+              name="created_by"
+              placeholder="john doe"
+              onChange={handleCreatedByChange}
+            />
+            <Field
+              label="a sweet note"
+              value={formInfo.entry}
+              name="entry"
+              placeholder="xyz"
+              onChange={handleEntryChange}
+            />
+          </fieldset>
+        );
       default:
         return null;
     }
@@ -300,7 +300,7 @@ export default function WriteNoteCTA() {
 
   const validateStep = async (currentStep: number) => {
     setLoading(true);
-    if (currentStep === 1) {
+    if (currentStep === 2) {
       const formData = new FormData();
       formData.append("created_by", formInfo.created_by);
       formData.append("entry", formInfo.entry);
@@ -339,23 +339,26 @@ export default function WriteNoteCTA() {
     }
 
     if (step === 1) {
-      const isValid = await validateStep(step);
-      if (!isValid) return;
-    }
-
-    if (step === 2) {
       setLoading(true);
       const s = handleASCIICapture();
       if (!s) {
         setLoading(false);
         return;
       }
+      setLoading(false);
+      setStep((prev) => prev + 1);
+      return;
+    }
+
+    if (step === 2) {
+      const isValid = await validateStep(step);
+      if (!isValid) return;
 
       const formData = new FormData();
       formData.append("local_entry_id", crypto.randomUUID());
       formData.append("created_by", formInfo.created_by);
       formData.append("entry", formInfo.entry);
-      formData.append("signature", s);
+      formData.append("signature", formInfo.signature);
       formData.append(
         "hasCreatedEntryBefore",
         hasCreatedEntryBefore.toString()
@@ -497,7 +500,7 @@ export default function WriteNoteCTA() {
       }
     };
 
-    if (step === 2 && isOpen) {
+    if (step === 1 && isOpen) {
       void startCamera();
       return;
     }
@@ -554,6 +557,25 @@ export default function WriteNoteCTA() {
                             <AnimatePresence>
                               {step === 1 && (
                                 <motion.div
+                                  className="absolute -top-12 left-0 w-full rounded-md border border-white/60 bg-black/30 px-4 py-2 text-center text-sm font-medium text-white shadow-lg transition"
+                                  style={{
+                                    textWrap: "balance",
+                                  }}
+                                  initial={{ opacity: 0, y: -20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{
+                                    opacity: 0,
+                                    y: -20,
+                                    transition: {
+                                      duration: 0.1,
+                                    },
+                                  }}
+                                >
+                                  take an ascii selfie for your polaroid!
+                                </motion.div>
+                              )}
+                              {step === 2 && (
+                                <motion.div
                                   className={cn(
                                     "absolute -top-18 left-0 w-full rounded-md border border-white/60 bg-black/30 px-4 py-2 text-center text-sm font-medium text-white shadow-lg transition",
                                     errors
@@ -598,25 +620,6 @@ export default function WriteNoteCTA() {
                                   </AnimatePresence>
                                 </motion.div>
                               )}
-                              {step === 2 && (
-                                <motion.div
-                                  className="absolute -top-12 left-0 w-full rounded-md border border-white/60 bg-black/30 px-4 py-2 text-center text-sm font-medium text-white shadow-lg transition"
-                                  style={{
-                                    textWrap: "balance",
-                                  }}
-                                  initial={{ opacity: 0, y: -20 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  exit={{
-                                    opacity: 0,
-                                    y: -20,
-                                    transition: {
-                                      duration: 0.1,
-                                    },
-                                  }}
-                                >
-                                  take an ascii selfie for your note!
-                                </motion.div>
-                              )}
                             </AnimatePresence>
                             {stepConent(step, videoRef)}
                           </div>
@@ -638,7 +641,7 @@ export default function WriteNoteCTA() {
                 disabled={pending || loading}
                 onClick={handleClick}
               >
-                {isOpen || step === 3 ? buttonText : "write me a note"}
+                {isOpen || step === 3 ? buttonText : "Take a Polaroid"}
               </button>
             </form>
           </div>
