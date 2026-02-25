@@ -74,7 +74,7 @@ const projects = [
   {
     name: "RaiseAChild",
     year: "2023",
-    highlight: "Optimized data processing to handle 40K+ constituents and events, resulting in a 100% increase in report generation efficiency and saving 30 hours per week.",
+    highlight: "Optimized data processing to handle 40K+ constituents and events, resulting in a 100% increase in report generation efficiency.",
   },
 ];
 
