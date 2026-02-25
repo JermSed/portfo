@@ -71,6 +71,11 @@ const projects = [
     year: "2024",
     highlight: "Created a platform mapping LA climate projects with live sustainability and donation data.",
   },
+  {
+    name: "RaiseAChild",
+    year: "2023",
+    highlight: "Optimized data processing to handle 40K+ constituents and events, resulting in a 100% increase in report generation efficiency and saving 30 hours per week.",
+  },
 ];
 
 export default function HomePage() {
