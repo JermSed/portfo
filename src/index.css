@@ -23,16 +23,21 @@
 /* Components */
 @layer components {
   .link-solid {
-    @apply underline decoration-slate-300 hover:decoration-ink-500;
+    @apply underline decoration-slate-300 hover:decoration-accent-500 hover:text-accent-600;
   }
   .card {
-    @apply bg-white/80 backdrop-blur-sm rounded-2xl transition shadow-none;
+    @apply bg-white border border-slate-200/60 rounded-2xl transition shadow-sm;
   }
 }
 
 /* Utilities */
 @layer utilities {
   .site-bg {
-    @apply min-h-screen bg-white;
+    @apply min-h-screen;
+    background-color: #fafbfc;
+    background-image:
+      linear-gradient(to right, rgba(148,163,184,0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(148,163,184,0.08) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
 }

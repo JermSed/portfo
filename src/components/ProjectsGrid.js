@@ -2,25 +2,35 @@ import React from 'react';
 
 export default function ProjectsGrid({ items }) {
   return (
-    <section>
-      <h2 className="section-title">Projects</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <section className="space-y-6">
+      <p className="eyebrow">Projects</p>
+      <div className="grid items-start gap-3 sm:grid-cols-2">
         {items.map((project, idx) => (
-          <a
-            key={idx}
-            href={project.url}
-            className="group block card p-5 border border-slate-200 hover:border-slate-300 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 transition-colors no-underline hover:no-underline decoration-transparent hover:decoration-transparent text-inherit"
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="font-semibold text-ink-900 text-lg">{project.name}</span>
-              <span className="text-slate-300 group-hover:text-ink-400 transition-colors ml-2">↗</span>
-            </div>
-            <div className="text-ink-500 group-hover:text-ink-700 transition-colors text-sm leading-snug">{project.description}</div>
-          </a>
+          <div key={idx} className="rounded-lg border border-neutral-200 px-4 py-4 transition-colors hover:border-neutral-400">
+            <div className="text-lg text-neutral-900">{project.name}</div>
+            <p className="mt-2 text-[15px] leading-relaxed text-neutral-600">
+              {project.description}
+            </p>
+            {project.url && (
+              <a href={project.url} className="body-link mt-3 inline-block font-sans text-sm">
+                Visit ↗
+              </a>
+            )}
+            {project.tech?.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {project.tech.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-neutral-200 bg-neutral-50 px-2 py-0.5 font-sans text-[11px] text-neutral-500"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
       </div>
     </section>
   );
 }
-
-

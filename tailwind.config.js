@@ -6,14 +6,22 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Geist', 'Manrope', '"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
-        display: ['Geist', 'Manrope', 'ui-sans-serif', 'system-ui']
+        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Helvetica', 'Arial', 'sans-serif'],
+        serif: ['"Iowan Old Style"', '"Palatino Linotype"', 'Palatino', 'Georgia', 'ui-serif', 'serif'],
+        display: ['"Iowan Old Style"', '"Palatino Linotype"', 'Palatino', 'Georgia', 'ui-serif', 'serif'],
       },
       colors: {
         ink: {
           900: '#0b1220',
           700: '#202939',
           500: '#3b455a',
+        },
+        accent: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
         },
       },
       boxShadow: {

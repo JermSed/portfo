@@ -1,52 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function Logo({ src, alt, fallback }) {
-  const [failed, setFailed] = useState(false);
-  if (src && !failed) {
-    return (
-      <img
-        src={src}
-        alt={alt}
-        referrerPolicy="no-referrer"
-        loading="lazy"
-        decoding="async"
-        className="w-9 h-9 rounded-lg object-contain bg-white border border-slate-200 p-0"
-        onError={() => setFailed(true)}
-      />
-    );
-  }
-  return (
-    <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-100 text-ink-900 font-semibold border border-slate-200">
-      {fallback}
-    </div>
-  );
-}
+import Logo from './Logo';
 
 export default function WorkList({ items }) {
   return (
-    <section className="mb-16">
-      <h2 className="section-title">Work</h2>
-      <div className="divide-y divide-slate-200/70">
+    <section className="space-y-6">
+      <p className="eyebrow">Experience</p>
+      <div className="space-y-7">
         {items.map((job, idx) => (
-          <div key={idx} className="flex items-center py-4">
-            <div className="mr-4">
-              <Logo
-                src={job.logo}
-                alt={job.company || job.name}
-                fallback={(job.company || job.name || '?').slice(0, 1)}
-              />
+          <div key={idx} className="flex items-start gap-4">
+            <Logo
+              src={job.logo}
+              alt={job.company || job.name}
+              fallback={(job.company || job.name || '?').slice(0, 1)}
+            />
+            <div className="min-w-0 flex-1">
+              <div className="text-lg leading-snug text-neutral-900">{job.name}</div>
+              <div className="mt-1 font-sans text-[11px] uppercase tracking-[0.14em] text-neutral-500">
+                {job.role}
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <span className="font-medium text-ink-900">{job.name}</span>
-              <span className="ml-2 text-ink-500 text-sm">{job.role}</span>
-              <span className="ml-2 text-slate-400 text-sm">{job.area}</span>
+            <div className="shrink-0 pt-1 font-sans text-[11px] uppercase tracking-[0.14em] text-neutral-400">
+              {job.period}
             </div>
-            <div className="text-slate-500 text-sm min-w-fit">{job.period}</div>
           </div>
         ))}
       </div>
     </section>
   );
 }
-
-
