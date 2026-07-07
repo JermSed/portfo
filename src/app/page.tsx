@@ -5,7 +5,8 @@ import SiteFooter from '../components/SiteFooter';
 import SiteNav from '../components/SiteNav';
 import ThoughtsList from '../components/ThoughtsList';
 import WorkList from '../components/WorkList';
-import { involvement, photos, profile, projects, thoughts, workEntries } from '../data/resume';
+import { involvement, photos, profile, projects, workEntries } from '../data/resume';
+import { getAllThoughts } from '../lib/thoughts';
 
 export default function HomePage() {
   return (
@@ -41,7 +42,7 @@ export default function HomePage() {
       </div>
 
       <div className="mt-16">
-        <ThoughtsList items={thoughts} />
+        <ThoughtsList items={getAllThoughts()} />
       </div>
 
       <div className="mt-16">

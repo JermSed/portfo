@@ -22,7 +22,7 @@ export default function PhotosPage() {
       </header>
 
       <p className="mt-10 text-[19px] leading-8 text-neutral-700">
-        Things I&apos;ve pointed the camera at. You can also find them on the{' '}
+        Things I&apos;ve pointed my camera at. You can find them on my instagram @jermpegs (dm for inquiry) or on the{' '}
         <Link href="/#photo-map" className="body-link">
           map
         </Link>

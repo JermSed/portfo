@@ -8,6 +8,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "maplibre-gl": "^5.24.0",
+    "marked": "^18.0.5",
     "next": "^15.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -19,7 +20,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "next lint"
+    "test": "next lint",
+    "add-photo": "node scripts/add-photo.mjs",
+    "add-thought": "node scripts/add-thought.mjs"
   },
   "eslintConfig": {
     "extends": [

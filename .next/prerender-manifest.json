@@ -1,11 +1,1 @@
-{
-  "version": 4,
-  "routes": {},
-  "dynamicRoutes": {},
-  "notFoundRoutes": [],
-  "preview": {
-    "previewModeId": "f5749ef7a05d44d4edad74f094507f9b",
-    "previewModeSigningKey": "da7371fd788be211b7631477917d22dd71f0bb7e4233354f855f78a5bfdaf493",
-    "previewModeEncryptionKey": "03473762362c57c0d1e4cf06fe6f9c3ad8a0561c34e09586675fab484043e389"
-  }
-}
+{"version":4,"routes":{"/thoughts/rebuilt-this-site":{}},"dynamicRoutes":{"/thoughts/[slug]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/thoughts/[slug]","routeRegex":"^\\/thoughts\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"f5749ef7a05d44d4edad74f094507f9b","previewModeSigningKey":"da7371fd788be211b7631477917d22dd71f0bb7e4233354f855f78a5bfdaf493","previewModeEncryptionKey":"03473762362c57c0d1e4cf06fe6f9c3ad8a0561c34e09586675fab484043e389"}}

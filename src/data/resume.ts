@@ -37,11 +37,6 @@ export type Involvement = {
   logo?: string;
 };
 
-export type Thought = {
-  date: string;
-  text: string;
-};
-
 export type PhotoCategory = 'city' | 'nature' | 'coast' | 'night';
 
 export type Photo = {
@@ -73,7 +68,7 @@ export const profile: Profile = {
     github: 'https://github.com/jermsed',
   },
   summary:
-    "I'm an engineer focused on building reliable software. I enjoy shipping clear interfaces and have a recent focus on AI-enabled products. I'm currently studying Computer Engineering and Computer Science at USC. When I'm not building software, I enjoy doing anything outdoors especially photography and hiking. I'm currently building SceneFlow, a collaborative pre-production canvas for filmmakers, combining my love for film/photography and software engineering.",
+    "I'm an engineer focused on building reliable software. I enjoy shipping clear interfaces and have a recent focus on AI-enabled products. I'm currently studying Computer Engineering and Computer Science at USC.                   When I'm not building software, I enjoy doing anything outdoors especially photography and hiking. I'm currently building SceneFlow, a collaborative pre-production canvas for filmmakers, combining my love for film/photography and software engineering.",
 };
 
 export const workEntries: WorkEntry[] = [
@@ -148,14 +143,6 @@ export const involvement: Involvement[] = [
   },
 ];
 
-// raw thoughts — newest first
-export const thoughts: Thought[] = [
-  {
-    date: 'Jul 2026',
-    text: 'Rebuilt this site to feel more like me.',
-  },
-];
-
 export const projects: Project[] = [
   {
     name: 'SceneFlow',
@@ -201,13 +188,6 @@ export const projects: Project[] = [
 
 export const photos: Photo[] = [
   {
-    title: 'Summer lift',
-    location: 'Lake Tahoe, NV',
-    url: '/photos/lake-tahoe.jpg',
-    coordinates: [-119.9236, 39.2371],
-    category: 'nature',
-  },
-  {
     title: 'Boulder line',
     location: 'Lake Tahoe, NV',
     url: '/photos/lake-tahoe-2.jpg',
@@ -215,59 +195,10 @@ export const photos: Photo[] = [
     category: 'nature',
   },
   {
-    title: 'Snow Lake window',
-    location: 'Snoqualmie Pass, WA',
-    url: '/photos/snow-lake.jpg',
-    coordinates: [-121.4438, 47.4602],
-    category: 'nature',
-  },
-  {
-    title: 'Off the deck',
-    location: 'South Lake Union, WA',
-    url: '/photos/south-lake-union.jpg',
-    coordinates: [-122.3344, 47.627],
-    category: 'city',
-  },
-  {
-    title: 'Beach afternoon',
-    location: 'Los Angeles, CA',
-    url: '/photos/la-beach.jpg',
-    coordinates: [-118.3903, 33.8378],
-    category: 'coast',
-  },
-  {
-    title: 'Paddle out',
-    location: 'Los Angeles, CA',
-    url: '/photos/la-beach-2.jpg',
-    coordinates: [-118.3921, 33.8412],
-    category: 'coast',
-  },
-  {
-    title: 'Island sunset',
-    location: 'Maui, HI',
-    url: '/photos/maui.jpg',
-    coordinates: [-156.445, 20.7644],
-    category: 'coast',
-  },
-  {
-    title: 'Below the falls',
-    location: 'Yosemite, CA',
-    url: '/photos/yosemite.jpg',
-    coordinates: [-119.5964, 37.7515],
-    category: 'nature',
-  },
-  {
-    title: 'Falls rainbow',
-    location: 'Yosemite, CA',
-    url: '/photos/yosemite-falls.jpg',
-    coordinates: [-119.5966, 37.7566],
-    category: 'nature',
-  },
-  {
-    title: 'Valley view',
-    location: 'Yosemite, CA',
-    url: '/photos/yosemite-cliff.jpg',
-    coordinates: [-119.6053, 37.7128],
+    title: 'Summer lift',
+    location: 'Lake Tahoe, NV',
+    url: '/photos/lake-tahoe.jpg',
+    coordinates: [-119.9236, 39.2371],
     category: 'nature',
   },
   {
@@ -278,11 +209,39 @@ export const photos: Photo[] = [
     category: 'city',
   },
   {
-    title: 'Morning trot',
-    location: 'Dublin, Ireland',
-    url: '/photos/dublin.jpg',
-    coordinates: [-6.2603, 53.3498],
+    title: 'Snow Lake window',
+    location: 'Snoqualmie Pass, WA',
+    url: '/photos/snow-lake.jpg',
+    coordinates: [-121.4438, 47.4602],
+    category: 'nature',
+  },
+  {
+    title: 'Stars over the pines',
+    location: 'Snoqualmie, WA',
+    url: '/photos/snoqualmie.jpg',
+    coordinates: [-121.8226, 47.5287],
+    category: 'night',
+  },
+  {
+    title: 'Off the deck',
+    location: 'South Lake Union, WA',
+    url: '/photos/south-lake-union.jpg',
+    coordinates: [-122.3344, 47.627],
     category: 'city',
+  },
+  {
+    title: 'Island sunset',
+    location: 'Maui, HI',
+    url: '/photos/maui.jpg',
+    coordinates: [-156.445, 20.7644],
+    category: 'coast',
+  },
+  {
+    title: 'Into the mist',
+    location: 'Cliffs of Moher, Ireland',
+    url: '/photos/cliffs-of-moher.jpg',
+    coordinates: [-9.4265, 52.9715],
+    category: 'coast',
   },
   {
     title: 'Platform piano',
@@ -292,11 +251,46 @@ export const photos: Photo[] = [
     category: 'city',
   },
   {
-    title: 'Into the mist',
-    location: 'Cliffs of Moher, Ireland',
-    url: '/photos/cliffs-of-moher.jpg',
-    coordinates: [-9.4265, 52.9715],
+    title: 'Morning trot',
+    location: 'Dublin, Ireland',
+    url: '/photos/dublin.jpg',
+    coordinates: [-6.2603, 53.3498],
+    category: 'city',
+  },
+  {
+    title: 'Paddle out',
+    location: 'Los Angeles, CA',
+    url: '/photos/la-beach-2.jpg',
+    coordinates: [-118.3921, 33.8412],
     category: 'coast',
+  },
+  {
+    title: 'Beach afternoon',
+    location: 'Los Angeles, CA',
+    url: '/photos/la-beach.jpg',
+    coordinates: [-118.3903, 33.8378],
+    category: 'coast',
+  },
+  {
+    title: 'Valley view',
+    location: 'Yosemite, CA',
+    url: '/photos/yosemite-cliff.jpg',
+    coordinates: [-119.6053, 37.7128],
+    category: 'nature',
+  },
+  {
+    title: 'Falls rainbow',
+    location: 'Yosemite, CA',
+    url: '/photos/yosemite-falls.jpg',
+    coordinates: [-119.5966, 37.7566],
+    category: 'nature',
+  },
+  {
+    title: 'Below the falls',
+    location: 'Yosemite, CA',
+    url: '/photos/yosemite.jpg',
+    coordinates: [-119.5964, 37.7515],
+    category: 'nature',
   },
 ];
 

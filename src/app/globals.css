@@ -26,6 +26,117 @@
   @apply text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition hover:decoration-neutral-800;
 }
 
+/* Thought pages (rendered markdown) */
+.thought-body {
+  @apply space-y-5 text-[19px] leading-8 text-neutral-700;
+}
+
+.thought-body h2 {
+  @apply mt-10 text-2xl leading-snug;
+}
+
+.thought-body h3 {
+  @apply mt-8 text-xl leading-snug;
+}
+
+.thought-body a {
+  @apply text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition hover:decoration-neutral-800;
+}
+
+.thought-body ul,
+.thought-body ol {
+  @apply space-y-2 pl-6;
+}
+
+.thought-body ul {
+  @apply list-disc;
+}
+
+.thought-body ol {
+  @apply list-decimal;
+}
+
+.thought-body blockquote {
+  @apply border-l-2 border-neutral-200 pl-5 text-neutral-500;
+}
+
+.thought-body code {
+  @apply rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-[15px] text-neutral-800;
+}
+
+.thought-body pre {
+  @apply overflow-x-auto rounded-md border border-neutral-200 bg-neutral-50 p-4;
+}
+
+.thought-body pre code {
+  @apply bg-transparent p-0;
+}
+
+.thought-body img {
+  @apply w-full rounded-md border border-neutral-200;
+}
+
+.thought-body hr {
+  @apply my-10 border-neutral-200;
+}
+
+/* Photo lightbox */
+@keyframes lightbox-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightbox-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes lightbox-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes lightbox-pop-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.92) translateY(24px);
+  }
+}
+
+.lightbox-fade {
+  animation: lightbox-fade 500ms ease-out both;
+}
+
+.lightbox-pop {
+  animation: lightbox-pop 650ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.lightbox-fade-out {
+  animation: lightbox-fade-out 350ms cubic-bezier(0.7, 0, 0.84, 0) both;
+}
+
+.lightbox-pop-out {
+  animation: lightbox-pop-out 350ms cubic-bezier(0.7, 0, 0.84, 0) both;
+}
+
 /* Photo map (MapLibre) */
 .photo-pin {
   cursor: pointer;

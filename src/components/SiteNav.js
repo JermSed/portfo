@@ -6,6 +6,9 @@ export default function SiteNav() {
       <Link href="/" className="no-underline hover:underline underline-offset-4">
         Home
       </Link>
+      <Link href="/thoughts" className="no-underline hover:underline underline-offset-4">
+        Thoughts
+      </Link>
       <Link href="/photos" className="no-underline hover:underline underline-offset-4">
         Photos
       </Link>

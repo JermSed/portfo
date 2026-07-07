@@ -107,7 +107,7 @@ export default function PhotoMap({ items }) {
 
   if (!items?.length) return null;
 
-  const lastPhoto = items[items.length - 1];
+  const lastPhoto = items[0];
 
   return (
     <section className="space-y-3">

@@ -16,6 +16,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/photos/page.js"
+    ],
+    "/thoughts/[slug]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/thoughts/[slug]/page.js"
+    ],
+    "/thoughts/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/thoughts/page.js"
     ]
   }
 }
