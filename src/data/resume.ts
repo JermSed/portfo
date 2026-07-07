@@ -147,7 +147,7 @@ export const projects: Project[] = [
   {
     name: 'SceneFlow',
     description:
-      'Collaborative pre-production canvas for filmmakers — offline-first with CRDT-based sync for real-time co-editing on unreliable networks. Used by 3 working filmmakers in place of Milanote.',
+      'Collaborative pre-production canvas for filmmakers — offline-first with CRDT-based sync for real-time co-editing on unreliable networks.',
     tech: ['Swift', 'SwiftUI', 'Automerge CRDTs'],
   },
   {
