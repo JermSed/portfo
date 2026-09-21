@@ -30,6 +30,7 @@ function parseFrontmatter(raw: string): { data: Record<string, string>; body: st
 }
 
 export function getThought(slug: string): Thought | null {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
   const file = path.join(thoughtsDir, `${slug}.md`);
   if (!fs.existsSync(file)) return null;
   const { data, body } = parseFrontmatter(fs.readFileSync(file, 'utf8'));

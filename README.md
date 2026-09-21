@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+# Jeremy Sedillo — portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A Next.js App Router portfolio for engineering work, writing, and photography. TypeScript, React, Tailwind CSS, Motion, and a local SVG photo atlas.
 
-## Available Scripts
+## Development
 
-In the project directory, you can run:
+```sh
+npm ci
+npm run dev
+```
 
-### `npm start`
+## Checks and production
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```sh
+npm test        # ESLint and TypeScript checks; not a unit test suite
+npm run build  # Production compilation and static route generation
+npm start      # Serve the production build
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Content
 
-### `npm test`
+- `src/data/resume.ts`: profile, projects, experience, photo captions and coordinates.
+- `content/thoughts/*.md`: trusted, repository-authored Markdown with title, date, and cover frontmatter. Do not accept untrusted HTML here.
+- `public/photos`: original photographs. Gallery thumbnails use Next Image optimization; the viewer retains originals.
+- `public/Jeremy_Sedillo_Resume.pdf`: downloadable résumé.
+- `npm run add-photo` and `npm run add-thought`: content helper scripts.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Design
 
-### `npm run build`
+An editorial field journal: warm ivory, near-black, and muted cobalt, oversized sans/serif typography, a static contour illustration, numbered project cards, and photographic field notes. Supports system dark mode, reduced motion, high contrast, and reduced transparency. The interactive photo atlas is on `/photos` to keep map code away from the home page.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The atlas uses bundled Natural Earth geometry and needs no external map services. Regenerate it with `node scripts/build-map.mjs`. Deploy with a Next.js-compatible runtime for image optimization. See `AUDIT.md` for findings and remaining limitations.

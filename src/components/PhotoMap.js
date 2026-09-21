@@ -1,144 +1,87 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import 'maplibre-gl/dist/maplibre-gl.css';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
+import { useMemo, useState } from 'react';
+import world from '../data/worldMap.json';
 
-import { photoCategories } from '../data/resume';
+const Lightbox = dynamic(() => import('./Lightbox'), { ssr: false });
+const noRect = () => null;
+const tones = ['cobalt', 'plum', 'teal', 'ochre'];
+const toneFor = (index) => `tone-${tones[index % tones.length]}`;
 
-const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
-const HOME_VIEW = { center: [-30, 30], zoom: 0.9 };
-
-function thumbUrl(url) {
-  return url.replace('w=1200', 'w=200');
+// Equal Earth, matching scripts/build-map.mjs. Geometry is bundled locally:
+// no WebGL, API key, remote style, glyph, or tile requests are needed.
+function project([lon, lat]) {
+  const l = Math.asin(Math.sqrt(3) / 2 * Math.sin(lat * Math.PI / 180));
+  const l2 = l * l;
+  const l6 = l2 * l2 * l2;
+  const x = (lon * Math.PI / 180 * Math.cos(l)) /
+    (Math.sqrt(3) / 2 * (1.340264 - 3 * .081106 * l2 + l6 * (7 * .000893 + 9 * .003796 * l2)));
+  const y = l * (1.340264 - .081106 * l2 + l6 * (.000893 + .003796 * l2));
+  return [world.scale * x + world.translate[0], world.translate[1] - world.scale * y];
 }
 
-function PinCap({ color, size = 13 }) {
-  // matches the ball head of the map pins, shine included
-  return (
-    <svg viewBox="0 0 16 16" width={size} height={size} aria-hidden="true">
-      <circle cx="8" cy="8" r="7.25" fill={color} stroke="rgba(0,0,0,0.15)" strokeWidth="0.75" />
-      <circle cx="5.3" cy="5.3" r="2.2" fill="rgba(255,255,255,0.6)" />
-    </svg>
-  );
-}
-
-function pinElement(color) {
-  // sewing-pin style: thin steel needle with a colored ball head
-  const el = document.createElement('div');
-  el.className = 'photo-pin';
-  el.innerHTML = `
-    <svg viewBox="0 0 18 42" width="18" height="42" aria-hidden="true">
-      <path d="M8 15.5 L10 15.5 L9 41 Z" fill="#8b909c"/>
-      <path d="M8.3 15.5 L9 15.5 L9 37 Z" fill="#d5d8de"/>
-      <circle cx="9" cy="8.5" r="7.5" fill="${color}" stroke="rgba(0,0,0,0.15)" stroke-width="0.75"/>
-      <circle cx="6.2" cy="5.8" r="2.3" fill="rgba(255,255,255,0.6)"/>
-    </svg>`;
-  return el;
+function groupPhotos(items) {
+  const groups = [];
+  items.forEach((photo, index) => {
+    // Nearby shots share a pin, so photos taken a few metres apart stay reachable.
+    let group = groups.find(g => Math.hypot(g.coordinates[0] - photo.coordinates[0], g.coordinates[1] - photo.coordinates[1]) < .9);
+    if (!group) {
+      group = { coordinates: photo.coordinates, indices: [], locations: [] };
+      groups.push(group);
+    }
+    group.indices.push(index);
+    if (!group.locations.includes(photo.location)) group.locations.push(photo.location);
+  });
+  return groups;
 }
 
 export default function PhotoMap({ items }) {
-  const containerRef = useRef(null);
-  const mapRef = useRef(null);
-  const markersRef = useRef([]);
-  const [isMoved, setIsMoved] = useState(false);
+  const groups = useMemo(() => groupPhotos(items), [items]);
+  const [selected, setSelected] = useState(0);
+  const [shot, setShot] = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const [viewer, setViewer] = useState(null);
+  if (!groups.length) return null;
+  const group = groups[selected] || groups[0];
+  const index = group.indices[shot] ?? group.indices[0];
+  const photo = items[index];
+  const [cx, cy] = project(group.coordinates);
+  const w = world.width / zoom;
+  const h = world.height / zoom;
+  const x = zoom === 1 ? 0 : Math.max(0, Math.min(world.width - w, cx - w / 2));
+  const y = zoom === 1 ? 0 : Math.max(0, Math.min(world.height - h, cy - h / 2));
+  const choose = (i) => { setSelected(i); setShot(0); setZoom(z => Math.max(3, z)); };
 
-  const resetView = () => {
-    mapRef.current?.flyTo({ ...HOME_VIEW, duration: 1400 });
-  };
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const maplibregl = (await import('maplibre-gl')).default;
-      if (cancelled || !containerRef.current) return;
-
-      const map = new maplibregl.Map({
-        container: containerRef.current,
-        style: MAP_STYLE,
-        ...HOME_VIEW,
-        minZoom: 0.4,
-        maxZoom: 14,
-        attributionControl: { compact: true },
-      });
-      mapRef.current = map;
-      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
-
-      map.on('moveend', () => {
-        const c = map.getCenter();
-        setIsMoved(
-          map.getZoom() > HOME_VIEW.zoom + 0.2 ||
-            Math.abs(c.lng - HOME_VIEW.center[0]) > 20 ||
-            Math.abs(c.lat - HOME_VIEW.center[1]) > 15
-        );
-      });
-
-      items.forEach((photo) => {
-        const category = photoCategories[photo.category] || { color: '#3b82f6' };
-        const el = pinElement(category.color);
-        const popup = new maplibregl.Popup({ offset: 34, closeButton: false }).setHTML(
-          `<div class="photo-popup">
-             <img src="${thumbUrl(photo.url)}" alt="${photo.title}" />
-             <div class="photo-popup-title">${photo.title}</div>
-             <div class="photo-popup-loc">${photo.location}</div>
-           </div>`
-        );
-        const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
-          .setLngLat(photo.coordinates)
-          .setPopup(popup)
-          .addTo(map);
-        // keep the click from also reaching the map canvas
-        el.addEventListener('click', (e) => {
-          e.stopPropagation();
-          marker.togglePopup();
-        });
-        markersRef.current.push(marker);
-      });
-    })();
-
-    return () => {
-      cancelled = true;
-      markersRef.current.forEach((m) => m.remove());
-      markersRef.current = [];
-      mapRef.current?.remove();
-      mapRef.current = null;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items]);
-
-  if (!items?.length) return null;
-
-  const lastPhoto = items[0];
-
-  return (
-    <section className="space-y-3">
-      <p className="eyebrow">Last photo</p>
-      <p className="flex items-center gap-2 font-sans text-sm text-neutral-600">
-        <PinCap color={(photoCategories[lastPhoto.category] || { color: '#3b82f6' }).color} />
-        {lastPhoto.title} · {lastPhoto.location}
-      </p>
-      <div className="relative">
-        <div
-          ref={containerRef}
-          className="h-[380px] w-full overflow-hidden rounded-lg border border-neutral-200"
-        />
-        {isMoved && (
-          <button
-            onClick={resetView}
-            className="absolute right-3 top-3 rounded-md border border-neutral-200 bg-white px-3 py-1.5 font-sans text-xs text-neutral-700 shadow-sm transition hover:border-neutral-400"
-          >
-            Whole world
-          </button>
-        )}
+  return <section aria-labelledby="atlas-heading" className="photo-atlas">
+    <div className="atlas-heading"><h2 id="atlas-heading" className="eyebrow">Field notes / Photo atlas</h2><span className="meta">{items.length} photographs · {groups.length} places</span></div>
+    <div className="atlas-layout">
+      <div className="atlas-map" role="group" aria-label="Photo locations on a world map">
+        <svg viewBox={`${x} ${y} ${w} ${h}`} preserveAspectRatio="none" aria-hidden="true">
+          <path d={world.sphere} className="atlas-ocean" />
+          <path d={world.graticule} className="atlas-gridlines" />
+          <path d={world.land} className="atlas-land" />
+          <path d={world.borders} className="atlas-borders" />
+        </svg>
+        {groups.map((g, i) => {
+          const [px, py] = project(g.coordinates);
+          const left = (px - x) / w * 100;
+          const top = (py - y) / h * 100;
+          if (left < 0 || left > 100 || top < 0 || top > 100) return null;
+          return <button type="button" key={g.locations[0]} className={`atlas-pin ${toneFor(i)}${selected === i ? ' atlas-pin-selected' : ''}`} style={{left:`${Number(left.toFixed(4))}%`,top:`${Number(top.toFixed(4))}%`}} onClick={() => choose(i)} aria-label={`${g.locations.join(' / ')}: ${g.indices.length} ${g.indices.length === 1 ? 'photo' : 'photos'}`} aria-pressed={selected === i}><span>{g.indices.length}</span></button>;
+        })}
+        <div className="atlas-zoom" aria-label="Map zoom"><button type="button" onClick={() => setZoom(z => Math.max(1,z - 1))} disabled={zoom === 1} aria-label="Zoom out">−</button><button type="button" onClick={() => setZoom(z => Math.min(5,z + 1))} disabled={zoom === 5} aria-label="Zoom in">+</button><button type="button" onClick={() => setZoom(1)}>World</button></div>
+        <span className="atlas-map-label">{zoom === 1 ? 'A few places, a few perspectives' : 'Zoomed to selected location'}</span>
       </div>
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-sans text-xs text-neutral-500">
-        {Object.entries(photoCategories).map(([key, { label, color }]) => (
-          <span key={key} className="flex items-center gap-1.5">
-            <PinCap color={color} />
-            {label}
-          </span>
-        ))}
+      <div className={`atlas-preview ${toneFor(selected)}`}>
+        <button type="button" className="atlas-image-button" onClick={() => setViewer(index)} aria-label={`Open ${photo.title} full screen`}><Image src={photo.url} alt={photo.title} width={720} height={480} sizes="(max-width: 700px) 100vw, 350px" /><span aria-hidden="true">↗</span></button>
+        <div className="atlas-caption" aria-live="polite"><h3>{photo.title}</h3><p>{photo.location}</p></div>
+        <div className="atlas-paging"><button type="button" onClick={() => setShot(s => s - 1)} disabled={shot === 0} aria-label="Previous photo at this location">←</button><span>{shot + 1} / {group.indices.length}</span><button type="button" onClick={() => setShot(s => s + 1)} disabled={shot === group.indices.length - 1} aria-label="Next photo at this location">→</button></div>
       </div>
-      <p className="font-sans text-xs text-neutral-400">Click a pin to see the shot.</p>
-    </section>
-  );
+    </div>
+    <div className="atlas-places" aria-label="Choose a photo location">{groups.map((g,i) => <button type="button" key={g.locations[0]} className={toneFor(i)} aria-pressed={selected === i} onClick={() => choose(i)}>{g.locations[0]} <span>{g.indices.length}</span></button>)}</div>
+    <p className="atlas-credit">Select a pin or a place to explore. Map data: <a href="https://www.naturalearthdata.com/">Natural Earth</a> · Equal Earth projection</p>
+    {viewer !== null && <Lightbox photos={items} index={viewer} sourceRectFor={noRect} aspectFor={noRect} onIndexChange={setViewer} onClose={() => setViewer(null)} />}
+  </section>;
 }

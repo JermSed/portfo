@@ -43,8 +43,8 @@ export default function AsciiMargins() {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let raf;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let raf = null;
     let last = 0;
     let t = 0;
 
@@ -65,8 +65,12 @@ export default function AsciiMargins() {
       const h = window.innerHeight;
       ctx.clearRect(0, 0, w, h);
 
-      // Margin bands either side of the centered 672px content column
-      const margin = (w - 672) / 2 - 36;
+      // Margin bands either side of the content column. The column is measured
+      // rather than assumed: it is sized in rem, so it grows with the reader's
+      // text-size setting and a hardcoded width would drift under the text.
+      const column = document.querySelector('.container-page');
+      const columnWidth = column ? column.getBoundingClientRect().width : 672;
+      const margin = (w - columnWidth) / 2 - 36;
       if (margin < 70) return;
 
       const rows = Math.ceil(h / CELL_H);
@@ -107,22 +111,46 @@ export default function AsciiMargins() {
       draw();
     };
 
-    size();
-    if (reduceMotion) {
-      draw(); // single static frame
-    } else {
+    const stop = () => {
+      if (raf !== null) cancelAnimationFrame(raf);
+      raf = null;
+    };
+
+    const start = () => {
+      if (raf !== null) return;
+      last = performance.now();
       raf = requestAnimationFrame(loop);
-    }
+    };
+
+    // The field is decorative, so it yields to the reader: it holds a single
+    // static frame under reduced motion, and stops entirely when the tab is
+    // hidden rather than animating to nobody.
+    const sync = () => {
+      if (motionQuery.matches || document.hidden) {
+        stop();
+        if (!document.hidden) draw();
+      } else {
+        start();
+      }
+    };
+
+    size();
+    draw();
+    sync();
 
     const onResize = () => {
       size();
       draw();
     };
     window.addEventListener('resize', onResize);
+    motionQuery.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
       window.removeEventListener('resize', onResize);
+      motionQuery.removeEventListener('change', sync);
+      document.removeEventListener('visibilitychange', sync);
     };
   }, []);
 

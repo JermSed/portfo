@@ -1,36 +1,16 @@
-import React from 'react';
+import ProjectDrawing from './ProjectDrawing';
 
+const tones = ['cobalt', 'ochre'];
+const labels = ['In progress / Film & software', 'Community / Technical leadership', '1st place / LA Hacks 2025', 'Startup / Small business', 'Environment / Data visualization', 'Community / Reporting tools'];
 export default function ProjectsGrid({ items }) {
-  return (
-    <section className="space-y-6">
-      <p className="eyebrow">Projects</p>
-      <div className="grid items-start gap-3 sm:grid-cols-2">
-        {items.map((project, idx) => (
-          <div key={idx} className="rounded-lg border border-neutral-200 px-4 py-4 transition-colors hover:border-neutral-400">
-            <div className="text-lg text-neutral-900">{project.name}</div>
-            <p className="mt-2 text-[15px] leading-relaxed text-neutral-600">
-              {project.description}
-            </p>
-            {project.url && (
-              <a href={project.url} className="body-link mt-3 inline-block font-sans text-sm">
-                Visit ↗
-              </a>
-            )}
-            {project.tech?.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {project.tech.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-neutral-200 bg-neutral-50 px-2 py-0.5 font-sans text-[11px] text-neutral-500"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+  if (!items?.length) return null;
+  return <section aria-labelledby="projects-heading">
+    <div className="section-heading"><div><p className="eyebrow">01 / Selected work</p><h2 id="projects-heading">Ideas into useful things.</h2></div><span className="eyebrow">{String(items.length).padStart(2, '0')} projects</span></div>
+    <div className="project-grid">{items.map((project, i) => <article key={project.name} className={`project-card project-card-${i} ${tones[i] ? `tone-${tones[i]}` : 'project-card-neutral'}`}>
+      <div className="project-top"><span className="eyebrow">{labels[i]}</span><span className="project-number">0{i + 1}</span></div>
+      <ProjectDrawing name={project.name} />
+      <h3>{project.url ? <a href={project.url}>{project.name}<span aria-hidden="true">↗</span></a> : project.name}</h3>
+      <p>{project.description}</p><div className="project-tech">{project.tech.join(' / ')}</div>
+    </article>)}</div>
+  </section>;
 }
