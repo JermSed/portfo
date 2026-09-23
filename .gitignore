@@ -25,3 +25,5 @@ yarn-error.log*
 # next.js build output
 /.next
 tsconfig.tsbuildinfo
+
+/.next-studio

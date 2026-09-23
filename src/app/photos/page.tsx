@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import PhotoMap from '../../components/PhotoMap';
 import PhotoGallery from '../../components/PhotoGallery';
-import { photos } from '../../data/resume';
+import { getPhotos } from '../../lib/photos';
 
 export const metadata: Metadata = {
   title: 'Photos',
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default function PhotosPage() {
+  const photos = getPhotos();
   return (
     <>
       <header className="page-header">

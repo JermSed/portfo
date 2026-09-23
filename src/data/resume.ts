@@ -124,9 +124,15 @@ export const workEntries: WorkEntry[] = [
 
 export const involvement: Involvement[] = [
   {
+    name: 'Innovative Design',
+    logo: '/logos/innod.png',
+    role: 'General Member',
+    period: '2026 — Present',
+  },
+  {
     name: 'Code The Change',
     logo: '/logos/codethechange.jpeg',
-    role: 'Technical Lead, Developer, VP of Events, VP of Development',
+    role: 'Technical Lead, Developer, VP of Development',
     period: '2023 — Present',
   },
   {
@@ -187,6 +193,20 @@ export const projects: Project[] = [
 ];
 
 export const photos: Photo[] = [
+  {
+    title: 'Avalon waterfront',
+    location: 'Avalon, Catalina Island, CA',
+    url: '/photos/waterfront-feb-2026.jpg',
+    coordinates: [-118.3278, 33.3428],
+    category: 'coast',
+  },
+  {
+    title: 'Above Yosemite Valley',
+    location: 'Yosemite, CA',
+    url: '/photos/yosemite-jan-2026.jpg',
+    coordinates: [-119.6053, 37.7128],
+    category: 'nature',
+  },
   {
     title: 'Boulder line',
     location: 'Lake Tahoe, NV',

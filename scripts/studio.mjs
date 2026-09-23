@@ -1,0 +1,12 @@
+import { randomBytes } from 'node:crypto';
+import { spawn } from 'node:child_process';
+import { createServer } from 'node:net';
+const port=Number(process.env.STUDIO_PORT||3001);
+if(!Number.isInteger(port)||port<1024||port>65535) throw new Error('Choose a port between 1024 and 65535.');
+const probe=createServer();
+await new Promise((resolve,reject)=>{probe.once('error',reject);probe.listen(port,'127.0.0.1',()=>probe.close(resolve));});
+const token=randomBytes(32).toString('hex');
+const child=spawn(process.execPath,['node_modules/next/dist/bin/next','dev','--hostname','127.0.0.1','--port',String(port)],{stdio:'inherit',env:{...process.env,STUDIO_ENABLED:'1',STUDIO_TOKEN:token,STUDIO_DIST_DIR:'.next-studio'}});
+console.log(`\nYour private studio (open after the server is ready):\nhttp://127.0.0.1:${port}/api/studio/unlock?token=${token}\n\nKeep this local link private. Press Ctrl+C to close the studio.\n`);
+for(const signal of ['SIGINT','SIGTERM']) process.on(signal,()=>child.kill(signal));
+child.on('exit',code=>process.exit(code||0));

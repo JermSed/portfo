@@ -30,3 +30,14 @@ npm start      # Serve the production build
 An editorial field journal: warm ivory, near-black, and muted cobalt, oversized sans/serif typography, a static contour illustration, numbered project cards, and photographic field notes. Supports system dark mode, reduced motion, high contrast, and reduced transparency. The interactive photo atlas is on `/photos` to keep map code away from the home page.
 
 The atlas uses bundled Natural Earth geometry and needs no external map services. Regenerate it with `node scripts/build-map.mjs`. Deploy with a Next.js-compatible runtime for image optimization. See `AUDIT.md` for findings and remaining limitations.
+
+## Private content studio (local only)
+
+Run `npm run studio` and open the private link printed in the terminal after the server is ready. The editor runs separately at `127.0.0.1:3001` (override with `STUDIO_PORT`) and uses a separate `.next-studio` build folder. Keep the terminal running while editing; Ctrl+C closes it. A fresh launch creates a new access token and invalidates older sessions.
+
+- **Write a thought:** enter a title, introduction, date, and Markdown body. Save locally, then open the resulting page to review the rendered article.
+- **Add a photo:** choose a JPEG, PNG, or WebP (20 MB maximum), caption it, and choose a saved place or enter a new location with approximate map coordinates. Images are orientation-corrected, resized to a maximum 2000 px edge, and stripped of metadata.
+- Thoughts are saved in `content/thoughts/`; photo entries are appended to `content/photos.json` and images to `public/photos/`. Existing content is preserved. New filenames use unique suffixes.
+- Saving changes only the repository and local preview. Review, commit, and deploy those files through the usual workflow to update the live site.
+
+The studio is disabled outside development and without the launcher environment. Its page and write endpoints require a temporary HTTP-only, SameSite=Strict session, loopback Host validation, and same-origin POSTs. It has no public navigation link. This protects against website visitors and other devices, not someone who already controls your OS account. Never configure `STUDIO_ENABLED` or `STUDIO_TOKEN` on your hosting provider.
