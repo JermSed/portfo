@@ -1,7 +1,7 @@
 // Conceptual diagrams, not measured charts. The adjacent copy describes each project.
 export default function ProjectDrawing({ name }) {
   if (name === 'SceneFlow') {
-    return <div className="scene-diagram" aria-hidden="true"><span>01<br /><b>THE IDEA</b></span><i /><span>02<br /><b>THE SCENE</b></span><i /><span>03<br /><b>THE STORY</b></span></div>;
+    return <div className="scene-diagram" aria-hidden="true"><span>01<br /><b>STORYBOARD</b></span><i /><span>02<br /><b>AI SEQUENCING</b></span><i /><span>03<br /><b>THE EDIT</b></span></div>;
   }
 
   let drawing;

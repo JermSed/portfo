@@ -1,0 +1,51 @@
+export const projectStories = {
+  sceneflow: {
+    name: 'SceneFlow', category: 'Creative software / 2026–Present', headline: 'From storyboard to editing timeline.',
+    problem: 'A storyboard captures the intent of a film, but turning raw footage into an edit means finding and sequencing clips that match that plan. SceneFlow connects those two stages.',
+    built: 'A collaborative pre-production canvas for storyboarding and shot planning, paired with an AI agent that analyzes raw footage against storyboards. The agent selects and sequences matching clips, then generates structured DaVinci Resolve timelines for continued editing.',
+    challenge: 'Carrying creative context from the planning canvas into the editing workflow. Built with Swift and SwiftUI for iPad and macOS, the platform connects storyboards and shot plans to agent-driven clip selection and sequencing.',
+    result: 'An ongoing platform that takes filmmakers from collaborative planning to an editable DaVinci Resolve timeline, keeping the storyboard connected to the footage.',
+    flow: ['Storyboards & shot plans', 'Raw footage analysis', 'Clip selection & sequencing', 'DaVinci Resolve timeline'],
+  },
+  'fccw-crm': {
+    name: 'FCCW CRM', category: 'Community / Technical Lead / 2025', headline: 'One system for a connected community.',
+    problem: 'Memberships, donations, and events needed a consistent shared record. Recurring drift between Shopify and the CRM created manual data corrections across a community of more than 3,000 members.',
+    built: 'As Technical Lead, I architected a backend that unifies memberships, donations, and events, and led a nine-person engineering team through end-to-end delivery.',
+    challenge: 'Keeping Shopify and the CRM consistent over time. I built webhook and reconciliation pipelines using Cloudflare Workers, D1, Hono, and TypeScript to address recurring data drift.',
+    result: 'Reduced manual data corrections by 80% across 3,000+ members and eliminated recurring Shopify-to-CRM data drift.',
+    flow: ['Shopify events', 'Webhooks & reconciliation', 'Workers · Hono · D1', 'Unified member records'],
+  },
+  delphi: {
+    name: 'Delphi', category: 'Accessibility / LA Hacks 2025', headline: 'A conversation with the web.',
+    problem: 'Navigating visually structured websites can create barriers for people with visual impairments. Delphi explores how natural-language voice commands can support hands-free browsing.',
+    built: 'A voice-driven browsing system that translates natural-language commands into interactions with live webpage elements, built with Gemini, React, and the Web Speech API.',
+    challenge: 'Connecting spoken intent to actions on live websites. I tested end-to-end browsing workflows across live sites to validate the path from a voice command to a webpage interaction.',
+    result: 'Won first place in the Healthcare Track at LA Hacks 2025, which received more than 200 submissions overall.',
+    flow: ['Voice command', 'Natural-language interpretation', 'Live webpage elements', 'Hands-free navigation'],
+  },
+  tally: {
+    name: 'Tally', category: 'Small business / Technical Co-Founder / 2024–2025', headline: 'Less tracking. More making.',
+    problem: 'Stockouts cost clients revenue, while manually tracking inventory, product variants, and reorder thresholds added operational overhead.',
+    built: 'As Technical Co-Founder, I built automated inventory reordering workflows alongside variant tracking, threshold alerts, and real-time dashboards adopted in client operations.',
+    challenge: 'Connecting inventory visibility to replenishment so clients could act on stock levels. I built the product with Next.js, TypeScript, and React.',
+    result: 'Generated $120K+ in additional client revenue previously lost to stockouts and cut inventory management overhead by 40%.',
+    flow: ['Inventory & variants', 'Threshold alerts', 'Automated reordering', 'Real-time dashboards'],
+  },
+  'climate-cents': {
+    name: 'Climate Cents', category: 'Environment / Data visualization', headline: 'Making local air quality visible.',
+    problem: 'Air-quality data needs geographic context to be useful to people exploring conditions around them.',
+    built: 'An interactive map for Blue Sky LA with a heatmap overlay and real-time air-quality information.',
+    challenge: 'Presenting live environmental data through a map while improving load performance, using Cloudflare, Next.js, and TypeScript.',
+    result: 'Delivered 30% faster loads.',
+    flow: ['Air-quality data', 'Geographic context', 'Heatmap overlay', 'Interactive map'],
+  },
+  raiseachild: {
+    name: 'RaiseAChild', category: 'Nonprofit / Reporting tools', headline: 'From constituent records to useful reports.',
+    problem: 'Large constituent datasets need practical reporting tools that help teams get from records to answers.',
+    built: 'A dashboard integrated with the Little Green Light API, using PostgreSQL, Express, React, and Node.',
+    challenge: 'Working with more than 40,000 constituent records and improving the efficiency of report generation.',
+    result: 'Doubled report-generation efficiency.',
+    flow: ['Little Green Light API', 'Constituent records', 'Dashboard', 'Reports'],
+  },
+};
+export type ProjectSlug = keyof typeof projectStories;

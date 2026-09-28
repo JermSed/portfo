@@ -68,7 +68,7 @@ export const profile: Profile = {
     github: 'https://github.com/jermsed',
   },
   summary:
-    "I'm an engineer focused on building reliable software. I enjoy shipping clear interfaces and have a recent focus on AI-enabled products. I'm currently studying Computer Engineering and Computer Science at USC.                   When I'm not building software, I enjoy doing anything outdoors especially photography and hiking. I'm currently building SceneFlow, a collaborative pre-production canvas for filmmakers, combining my love for film/photography and software engineering.",
+    "I'm an engineer focused on building reliable software. I enjoy shipping clear interfaces and have a recent focus on AI-enabled products. I'm currently studying Computer Engineering and Computer Science at USC.                   When I'm not building software, I enjoy doing anything outdoors especially photography and hiking. I'm currently building SceneFlow, an AI-powered pre-production and editing platform for filmmakers, combining my love for film/photography and software engineering.",
 };
 
 export const workEntries: WorkEntry[] = [
@@ -153,8 +153,8 @@ export const projects: Project[] = [
   {
     name: 'SceneFlow',
     description:
-      'Collaborative pre-production canvas for filmmakers — offline-first with CRDT-based sync for real-time co-editing on unreliable networks.',
-    tech: ['Swift', 'SwiftUI', 'Automerge CRDTs'],
+      'AI-powered filmmaking platform — connects storyboards and raw footage to agent-selected clips and editable DaVinci Resolve timelines.',
+    tech: ['Swift', 'SwiftUI', 'AI Agents', 'DaVinci Resolve'],
   },
   {
     name: 'FCCW CRM',
@@ -165,14 +165,14 @@ export const projects: Project[] = [
   {
     name: 'Delphi',
     description:
-      'Voice-driven browsing for the visually impaired — transforms live websites into conversational interfaces. 1st place, Healthcare Track at LA Hacks 2025.',
+      'Voice-driven browsing for visually impaired users — translates natural-language commands into interactions with live webpage elements. 1st place, Healthcare Track at LA Hacks 2025.',
     url: 'https://github.com/brennenho/delphi',
     tech: ['Gemini', 'React', 'Web Speech API'],
   },
   {
     name: 'Tally',
     description:
-      'Inventory management for small producers — automated reordering, variant tracking, threshold alerts, and real-time dashboards; generated $120K+ in recovered client revenue.',
+      'Automated inventory reordering and real-time stock tracking — recovered $120K+ in client revenue lost to stockouts and cut management overhead 40%.',
     url: 'https://keeptallyapp.com',
     tech: ['Next.js', 'TypeScript', 'React'],
   },

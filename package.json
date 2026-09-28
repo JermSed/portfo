@@ -27,7 +27,8 @@
     "add-photo": "node scripts/add-photo.mjs",
     "add-thought": "node scripts/add-thought.mjs",
     "typecheck": "tsc --noEmit",
-    "studio": "node scripts/studio.mjs"
+    "studio": "node scripts/studio.mjs",
+    "test:characters": "node scripts/test-stick-world.mjs"
   },
   "browserslist": {
     "production": [
