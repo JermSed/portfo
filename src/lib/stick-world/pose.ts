@@ -30,10 +30,11 @@ export function poseCharacter(c:Character,time:number,surface?:Surface):Rig{
   m.pitch??={value:0,velocity:0};
   const pitch=spring(m.pitch,clamp(((c.attention?.y??c.y-40)-(c.y-40))/100,-1,1),dt,170,23);
   const lean=spring(m.lean,clamp(c.vx*.023+acceleration*.006,-4.5,4.5)+(c.intent?attention*1.6:0),dt,100,15);
-  const compression=spring(m.lift,anticipation?7:sit?12:climb?Math.sin(c.phase*2)*1.2:0,dt,170,20);
+  const compression=spring(m.lift,c.state==='recoiling'?4:anticipation?(c.jump?.vy===0?2:7):sit?12:climb?Math.sin(c.phase*2)*1.2:0,dt,170,20);
   const speed=Math.abs(c.vx),run=clamp((speed-55)/45,0,1);
   const breathe=Math.sin(time*(1.9+c.personality.energy*.4)+c.id)*.18;
-  const hip={x:c.x+lean*.35,y:c.y-23*c.scale+compression+breathe};
+  const runBounce=c.grounded&&speed>55?Math.abs(Math.sin(c.phase))*1.4*run:0;
+  const hip={x:c.x+lean*.35,y:c.y-23*c.scale+compression+breathe-runBounce};
   const shoulder={x:hip.x+lean+(climb?c.facing*2:0),y:hip.y-16*c.scale};
   const head={x:shoulder.x+headTurn*2.6,y:shoulder.y-8.5*c.scale+pitch*1.8};
   const feet:Point[]=[];
@@ -50,6 +51,17 @@ export function poseCharacter(c:Character,time:number,surface?:Surface):Rig{
       feet.push({x:f.x,y:supportY-Math.sin(f.phase*Math.PI)*(f.moving?4+run*5:0)});
     }
   }else for(let i=0;i<2;i++)feet.push({x:c.x+(i?7:-7)+Math.sin(time*3+i)* (hang?3:0),y:sit?c.y+13+Math.sin(time*2.8+i*.8)*2:climb?c.y-3-Math.sin(c.phase+i*Math.PI)*5:c.y-(c.vy<0?8:2)});
+  if(c.state==='stepping'&&c.stepFrom){
+    const from=c.stepFrom,t=clamp(1-c.timer/.48,0,1);
+    const swing=clamp(t/.65,0,1),follow=clamp((t-.55)/.45,0,1);
+    feet[0]={x:from.x+(from.targetX-from.x)*swing,y:from.y+(from.targetY-from.y)*swing-Math.sin(swing*Math.PI)*5};
+    feet[1]={x:from.x+(from.targetX-from.x)*follow,y:from.y+(from.targetY-from.y)*follow-Math.sin(follow*Math.PI)*4};
+  }
+  if(!c.grounded&&!climb&&!hang&&!sit){
+    const tuck=clamp(-c.vy/280,0,1);
+    feet[0]={x:c.x-c.facing*(6+8*tuck),y:c.y-3-9*tuck};
+    feet[1]={x:c.x+c.facing*(5+4*tuck),y:c.y-2-5*tuck};
+  }
   if(c.grounded&&!sit){
     // Lower the pelvis only as far as a planted leg requires; standing remains tall.
     const required=Math.max(...feet.map(f=>f.y-Math.sqrt(Math.max(1,(23.8*c.scale)**2-(f.x-hip.x)**2))));
@@ -73,10 +85,31 @@ export function poseCharacter(c:Character,time:number,surface?:Surface):Rig{
       };
       feet[i]={x:edge+(c.x-edge)*mantle,y:rung(8)*(1-mantle)+surface.top*mantle};
     }
-    hands=[0,1].map(i=>({x:edge,y:Math.max(surface.top,Math.ceil((c.y-48+i*10)/20)*20-i*10)}));
+    hands=[0,1].map(i=>{
+      const phase=(c.y-48+i*10)/20,base=Math.floor(phase),fraction=phase-base;
+      const t=clamp(fraction/.3,0,1);
+      const grip={x:edge,y:Math.max(surface.top,(base+t*t*(3-2*t))*20-i*10)};
+      // Let go after the chest clears the lip; do not stretch arms back to the edge.
+      const release=clamp((mantle-.35-i*.08)/.25,0,1);
+      return {x:grip.x+(shoulder.x+(i?5:-5)-grip.x)*release,y:grip.y+(hip.y-grip.y)*release};
+    });
   }else if(hang){
     const top=surface?.top??c.y-48;
     hands=[{x:c.x-5,y:top},{x:c.x+5,y:top}];
+  }
+  if(c.state==='tapping'&&c.attention){
+    const elapsed=.7-c.timer;
+    const extension=elapsed<.22?-5:elapsed<.38?20:Math.max(0,20-(elapsed-.38)*65);
+    hands[1]={x:shoulder.x+c.facing*extension,y:shoulder.y+5};
+  }
+  if(c.state==='recoiling'){
+    const recoil=Math.sin(clamp((.42-c.timer)/.42,0,1)*Math.PI)*4;
+    shoulder.x-=c.facing*recoil;head.x-=c.facing*recoil*1.4;
+    hands=[{x:shoulder.x-9,y:shoulder.y+5},{x:shoulder.x+9,y:shoulder.y+5}];
+  }
+  if(c.state==='reaching'&&c.attention){
+    const dx=c.attention.x-shoulder.x,dy=c.attention.y-shoulder.y,d=Math.max(1,Math.hypot(dx,dy));
+    hands[1]={x:shoulder.x+dx/d*Math.min(d,20),y:shoulder.y+dy/d*Math.min(d,20)};
   }
   if(c.state==='waving')hands[1]={x:shoulder.x+11+Math.sin(time*9)*3,y:shoulder.y-13};
   if(c.intent&&!climb&&!hang)hands[1]={x:shoulder.x+headTurn*10,y:shoulder.y+9};

@@ -3,8 +3,10 @@ export const clamp=(v:number,a:number,b:number)=>Math.max(a,Math.min(b,v));
 export function planJump(x:number,y:number,targetX:number,targetY:number,gravity:number,bravery:number,style=1) {
   const height=y-targetY;
   if(height>65+bravery*70 || Math.abs(targetX-x)>100+bravery*150 || height < -1800) return null;
-  const rise=Math.max(24+30*style,height+18+16*style);
-  const vy=-Math.sqrt(2*gravity*rise);
+  // Descents need gravity, not an upward launch. Level gaps get a modest arc.
+  const gap=Math.abs(targetX-x);
+  const rise=height < -12 ? 0 : Math.max(gravity*(gap/240)**2/8,8+Math.min(18,gap*.09)*style,height+8+6*style);
+  const vy=rise===0?0:-Math.sqrt(2*gravity*rise);
   const discriminant=vy*vy+2*gravity*(targetY-y);
   if(discriminant<0) return null;
   const time=(-vy+Math.sqrt(discriminant))/gravity;
@@ -35,4 +37,19 @@ export function rideSurface(c:Character,previous:Surface[],next:Surface[]) {
   if(!current) {c.platform=null;c.grounded=false;c.state='falling';c.vy=0;return;}
   if(old) {c.x+=current.left-old.left;c.y+=current.top-old.top;}
   if(c.grounded)c.x=clamp(c.x,current.left+5,current.right-5);
+}
+
+// Locomotion owns facing; idle attention can still follow the cursor or a friend.
+export function orientCharacter(c:Character,nextState=c.intent?.state??c.state) {
+  const preparing=nextState==='anticipating';
+  const traveling=nextState==='walking'||nextState==='running';
+  const airborne=['jumping','falling','startled'].includes(nextState);
+  if(!preparing&&!traveling&&!airborne)return;
+  const direction=preparing?(c.jump?.vx??0):airborne?c.vx:(c.goal?.x??c.x)-c.x;
+  // Preserve facing for vertical drops and tiny corrections near a destination.
+  if(Math.abs(direction)>2)c.facing=Math.sign(direction);
+  c.attention={
+    x:c.x+c.facing*65,
+    y:airborne?c.y-39+clamp(c.vy*.09,-28,40):preparing?c.y-58:c.y-39,
+  };
 }

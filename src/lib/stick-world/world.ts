@@ -1,5 +1,6 @@
+import { planRoute } from './routes';
 import { DOMEnvironment } from './environment';
-import { clamp, moveCharacter, planJump, rideSurface } from './physics';
+import { clamp, moveCharacter, planJump, rideSurface, orientCharacter } from './physics';
 import { drawCharacter, drawDebug } from './renderer';
 import type { Character, Config, Cursor, State, Surface } from './types';
 export type { Config } from './types';
@@ -22,8 +23,10 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
   let lastPaint=0;
   let held:Character|undefined;let grabOffset={x:0,y:0};let lastDrag=0;
   const state=(c:Character,value:State,duration=1)=>{
-    if(c.grounded&&!c.intent&&['walking','running','anticipating','waving'].includes(value)&&c.state!==value){
-      c.attention={x:c.goal?.x??c.attention?.x??c.x+c.facing*70,y:environment.surfaces.find(s=>s.id===c.goal?.surface)?.top??c.attention?.y??c.y-25};
+    orientCharacter(c,value);
+    if(c.grounded&&!c.intent&&['walking','running','anticipating','waving','reaching'].includes(value)&&c.state!==value){
+      c.attention={x:c.goal?.x??c.attention?.x??c.x+c.facing*70,y:c.attention?.y??environment.surfaces.find(s=>s.id===c.goal?.surface)?.top??c.y-25};
+      orientCharacter(c,value);
       c.intent={state:value,duration,remaining:.22+(1-c.personality.bravery)*.3+Math.random()*.16};
       c.state='looking';c.timer=c.intent.remaining;return;
     }
@@ -50,6 +53,8 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
     const friend=c.chase&&c.chase.until>time?characters.find(b=>b.id===c.chase?.id):undefined;
     const threat=c.flee&&c.flee.until>time?characters.find(b=>b.id===c.flee?.id):undefined;
     const places=environment.surfaces.filter(s=>s.label!=='nav'&&s.right-s.left>35&&(!visible(c)||(s.top>scrollY+65&&s.top<scrollY+innerHeight-12)));
+    c.route=(c.route??[]).filter(id=>id!==platform.id&&places.some(s=>s.id===id));
+    if(!c.route.length)c.route=planRoute(c,places,physics.gravity);
     if(friend?.platform!=null&&time-(c.sectionSince??0)<12)c.destination=friend.platform;
     const section=platform.section??'intro';
     if(c.lastSection!==section){
@@ -73,14 +78,27 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
       const wall=walls[0];const edge=Math.abs(c.x-wall.left)<Math.abs(c.x-wall.right)?wall.left:wall.right;
       c.climbFrom={x:c.x,y:c.y,duration:1.2+(c.y-wall.top)/55,edge};c.goal={x:edge,surface:wall.id};c.platform=wall.id;c.grounded=false;c.vx=c.vy=0;state(c,'climbing',c.climbFrom.duration);return;
     }
-    c.jumpStyle=.35+Math.random()*1.15;
+    c.jumpStyle=.55+c.personality.energy*.4+Math.random()*.25;
     const candidates=places.filter(s=>s.id!==platform.id).map(s=>{
       const x=clamp(friend?.platform===s.id?friend.x:c.x+(Math.random()-.5)*100,s.left+12,s.right-12);
       const jump=planJump(c.x,c.y,x,s.top,physics.gravity,c.personality.bravery,c.jumpStyle);
-      return {s,x,jump,score:Math.hypot(x-c.x,s.top-c.y)*.2+(destination?Math.hypot(x-(destination.left+destination.right)/2,s.top-destination.top)*.8:0)+(c.visited.has(s.id)?180:0)+(threat?-Math.hypot(x-threat.x,s.top-threat.y)*.7:0)+Math.random()*70};
-    }).filter(t=>t.jump && Math.hypot(t.x-c.x,t.s.top-c.y)>20).sort((a,b)=>a.score-b.score);
+      return {s,x,jump,score:(s.id===c.route?.[0]?-160:0)+Math.hypot(x-c.x,s.top-c.y)*.2+(destination?Math.hypot(x-(destination.left+destination.right)/2,s.top-destination.top)*.8:0)+(c.visited.has(s.id)?180:0)+(threat?-Math.hypot(x-threat.x,s.top-threat.y)*.7:0)+Math.random()*70};
+    }).filter(t=>t.jump && Math.hypot(t.x-c.x,t.s.top-c.y)>4).sort((a,b)=>a.score-b.score);
     if(candidates.length&&(friend||threat||Math.random()<.35+c.personality.curiosity*.2)){
       const target=candidates[friend||threat?0:Math.floor(Math.random()*Math.min(2,candidates.length))];
+      const rise=c.y-target.s.top,gap=Math.abs(target.x-c.x);
+      if(gap<26&&Math.abs(rise)<=18){
+        c.stepFrom={x:c.x,y:c.y,targetX:target.x,targetY:target.s.top,surface:target.s.id};
+        c.goal={x:target.x,surface:target.s.id};c.vx=c.vy=0;
+        state(c,'stepping',.48);return;
+      }
+      if(rise>18&&rise<46&&gap<28&&target.s.solid){
+        const edge=Math.abs(c.x-target.s.left)<Math.abs(c.x-target.s.right)?target.s.left:target.s.right;
+        if(Math.abs(c.x-edge)<24){
+          c.goal={x:target.x,surface:target.s.id};c.platform=target.s.id;c.grounded=false;c.vx=c.vy=0;
+          c.climbFrom={x:c.x,y:c.y,duration:1.2,edge};state(c,'climbing',1.2);return;
+        }
+      }
       if(target.s.top>c.y+50&&platform.id!==-1){
         const edge=Math.abs(c.x-platform.left)<Math.abs(c.x-platform.right)?platform.left+5:platform.right-5;
         c.departure={surface:target.s.id,x:target.x};c.goal={x:edge,surface:platform.id};state(c,'walking',12);return;
@@ -98,6 +116,18 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
 
     if(c===held)return;
     c.timer-=dt;c.cooldown-=dt;
+    const pointerSpeed=performance.now()-cursor.lastMoved>200?0:cursor.speed;
+    const cursorDistance=Math.hypot(cursor.x-c.x,cursor.y-(c.y-35));
+    const noticesCursor=behavior.cursorAwareness&&cursor.active&&cursorDistance<180&&visible(c);
+    if(noticesCursor){
+      c.cursorNotice=(c.cursorNotice??0)+dt;
+      c.attention={x:cursor.x,y:cursor.y};
+    }else{
+      c.cursorNotice=0;
+      const friend=characters.find(b=>b.id===c.chase?.id||b.id===c.flee?.id);
+      c.attention=friend?{x:friend.x,y:friend.y-40}:c.goal?{x:c.goal.x,y:environment.surfaces.find(s=>s.id===c.goal?.surface)?.top??c.y-40}:undefined;
+    }
+    orientCharacter(c);
     if(c.intent){
       c.intent.remaining-=dt;c.vx*=Math.exp(-dt*10);
       const support=environment.surfaces.find(s=>s.id===c.platform);
@@ -106,29 +136,67 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
       else return;
     }
     const platform=environment.surfaces.find(s=>s.id===c.platform);
+    if(c.state==='stepping'&&c.stepFrom){
+      const from=c.stepFrom,t=clamp(1-c.timer/.48,0,1),ease=t*t*(3-2*t);
+      if(!environment.surfaces.some(s=>s.id===from.surface)){c.stepFrom=undefined;c.grounded=false;state(c,'falling');return;}
+      c.x=from.x+(from.targetX-from.x)*ease;c.y=from.y+(from.targetY-from.y)*ease;
+      if(Math.abs(from.targetX-from.x)>2)c.facing=Math.sign(from.targetX-from.x);
+      c.attention={x:from.targetX,y:from.targetY};
+      if(t>=1){c.platform=from.surface;c.grounded=true;c.stepFrom=undefined;state(c,'looking',.4);}
+      return;
+    }
+    if(c.state==='tapping'){
+      c.vx*=Math.exp(-dt*12);
+      const partner=characters.find(b=>b.id===c.tagTarget);
+      if(partner&&c.timer<.4&&!c.tagContact&&partner.grounded&&partner.platform===c.platform&&Math.abs(c.x-partner.x)<32){
+        c.tagContact=true;partner.intent=undefined;partner.goal=null;
+        partner.attention={x:c.x,y:c.y-35};partner.facing=c.x>partner.x?1:-1;
+        state(partner,'recoiling',.42);
+      }
+      if(c.timer<=0){
+        c.tagTarget=undefined;state(c,'looking',.55);
+        if(partner&&partner.grounded&&partner.platform===c.platform&&platform&&(c.tagRounds??0)<2){
+          partner.tagRounds=(c.tagRounds??0)+1;partner.cooldown=1.5;
+          // After the contact and reaction, swap who is "it".
+          partner.chase={id:c.id,until:time+7};c.flee={id:partner.id,until:time+7};
+          const direction=c.x<partner.x?-1:1;
+          c.goal={x:direction<0?platform.left+14:platform.right-14,surface:platform.id};
+          state(c,'running',3);
+        }
+      }
+      return;
+    }
+    if(c.state==='recoiling'){c.vx=0;if(c.timer<=0)state(c,(c.fearUntil??0)>time?'running':'looking',(c.fearUntil??0)>time?2:.35);return;}
     if(c.chase&&c.chase.until<=time)c.chase=undefined;
     if(c.flee&&c.flee.until<=time)c.flee=undefined;
     const quarry=c.chase?characters.find(b=>b.id===c.chase?.id):undefined;
-    if(quarry&&c.grounded&&quarry.grounded&&c.platform===quarry.platform&&platform&&c.state!=='anticipating'){
+    if(quarry&&c.cooldown<=0&&c.grounded&&quarry.grounded&&c.platform===quarry.platform&&platform&&!['anticipating','landing'].includes(c.state)){
       const distance=Math.abs(c.x-quarry.x);
       if(distance<26){
         c.chase=undefined;quarry.flee=undefined;c.vx*=.4;quarry.vx*=.4;
-        state(c,'waving',1.2);state(quarry,'waving',1.5);
+        c.attention={x:quarry.x,y:quarry.y-32};quarry.attention={x:c.x,y:c.y-32};
+        c.tagTarget=quarry.id;c.tagContact=false;state(c,'tapping',.7);state(quarry,'looking',.8);
         c.socialAt=quarry.socialAt=time+8;c.cooldown=quarry.cooldown=3;
       }else{c.goal={x:clamp(quarry.x,platform.left+12,platform.right-12),surface:platform.id};state(c,'running',2);}
     }else if(quarry&&c.grounded&&['looking','idle','sitting'].includes(c.state))c.timer=Math.min(c.timer,.3);
-    const pointerSpeed=performance.now()-cursor.lastMoved>200?0:cursor.speed;
-    const cursorDistance=Math.hypot(cursor.x-c.x,cursor.y-(c.y-25));
-    if(!c.departure&&time-(c.sectionSince??0)<12&&behavior.cursorAwareness&&cursor.active&&c.grounded&&c.cooldown<=0&&cursorDistance<95){
+    if(!c.departure&&noticesCursor&&(c.cursorNotice??0)>.3&&c.grounded&&!c.intent&&c.cooldown<=0&&cursorDistance<130){
       c.facing=cursor.x>=c.x?1:-1;
-      if(pointerSpeed>550&&performance.now()-cursor.lastMoved<150){
-        c.facing*=-1;c.vx=c.facing*physics.runSpeed;c.vy=-180;c.platform=null;c.grounded=false;state(c,'startled',.7);
-      } else if(pointerSpeed<60){
-        if(platform && cursorDistance>50 && cursor.x>platform.left+12 && cursor.x<platform.right-12 && Math.random()<c.personality.curiosity){
-          c.goal={x:clamp(cursor.x-c.facing*22,platform.left+10,platform.right-10),surface:platform.id};state(c,'walking',2);
-        }else{state(c,Math.random()<c.personality.playfulness?'waving':'looking',1.8);c.vx=0;}
+      if(platform&&cursorDistance<85&&(pointerSpeed>350||Math.random()<(1-c.personality.bravery)*.6)){
+        // A flinch/crouch reads before the retreat instead of an instantaneous launch.
+        c.chase=c.flee=undefined;c.fearUntil=time+3;c.socialAt=time+5;
+        const away=c.x<cursor.x?-1:1;
+        c.goal={x:away<0?platform.left+12:platform.right-12,surface:platform.id};
+        state(c,'recoiling',.28);
+      }else if(pointerSpeed<90){
+        if(platform&&cursorDistance>45&&cursor.x>platform.left+12&&cursor.x<platform.right-12){
+          c.goal={x:clamp(cursor.x-c.facing*25,platform.left+10,platform.right-10),surface:platform.id};
+          state(c,'walking',2);
+        }else{
+          c.goal=null;c.vx=0;
+          state(c,cursorDistance<40?'reaching':'waving',1.3);
+        }
       }
-      c.cooldown=4;
+      c.cooldown=2.5+Math.random()*2;
     }
     if(c.state==='hanging'){
       c.vx=c.vy=0;
@@ -156,13 +224,13 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
       return;
     }
     if(c.state==='anticipating'){
-      if(c.timer<=0&&c.jump){c.vx=c.jump.vx;c.vy=c.jump.vy;c.platform=null;c.grounded=false;state(c,'jumping',2);}
+      if(c.timer<=0&&c.jump){if(c.jump.vy>=0)c.ignoreSurface=c.platform??undefined;c.vx=c.jump.vx;c.vy=c.jump.vy;c.platform=null;c.grounded=false;state(c,c.jump.vy>=0?'falling':'jumping',2);}
       else {if(!c.jump)state(c,'looking',.1);return;}
     }
     if(c.grounded){
       if(c.state==='walking'||c.state==='running'){
         const delta=(c.goal?.x??c.x)-c.x;
-        c.facing=delta>=0?1:-1;
+        if(Math.abs(delta)>2)c.facing=delta>0?1:-1;
         const speed=c.state==='running'?physics.runSpeed:physics.walkSpeed*(.6+c.personality.energy*.5);
         const desired=c.facing*Math.min(speed,Math.sqrt(2*150*Math.abs(delta)));
         c.vx+=(desired-c.vx)*(1-Math.exp(-dt*7));
@@ -179,8 +247,9 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
     const wasGrounded=c.grounded,oldY=c.y;
     const impactSpeed=c.vy;
     moveCharacter(c,dt,environment.surfaces.filter(s=>s.label!=='nav'&&s.id!==c.ignoreSurface),environment.width,environment.floor,physics.gravity);
+    orientCharacter(c);
     c.phase+=dt*(c.grounded?Math.abs(c.vx)*.15+.5:2);
-    if(c.grounded&&!wasGrounded){c.impact=Math.max(0,impactSpeed);c.ignoreSurface=undefined;c.departure=undefined;c.vx=0;c.jump=null;state(c,'landing',.25+Math.min(.25,(c.impact??0)/2000));}
+    if(c.grounded&&!wasGrounded){c.impact=Math.max(0,impactSpeed);c.ignoreSurface=undefined;c.departure=undefined;c.vx*=.3;c.jump=null;state(c,'landing',.25+Math.min(.25,(c.impact??0)/2000));}
     else if(!c.grounded&&c.vy>0){
       state(c,'falling',1);
       if(behavior.climbing&&c.cooldown<=0){
@@ -193,32 +262,33 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
     if(!behavior.socialInteractions)return;
     // Each character has its own social clock; pairs are not selected by array order.
     for(const a of [...characters].sort(()=>Math.random()-.5)){
-      if(a.intent||a.state==='landing'||time-(a.sectionSince??0)>12||a.chase||a.flee||!a.grounded||time<(a.socialAt??0)||a.state==='anticipating')continue;
+      if(a.intent||(a.fearUntil??0)>time||['stepping','landing','tapping','recoiling'].includes(a.state)||!visible(a)||a.chase||a.flee||!a.grounded||time<(a.socialAt??0)||a.state==='anticipating')continue;
       a.socialAt=time+5+Math.random()*12/(.4+a.personality.sociability);
-      const friends=characters.filter(b=>b!==a&&!b.intent&&b.state!=='landing'&&!b.chase&&!b.flee&&b.grounded&&b.state!=='anticipating'&&Math.abs(b.y-a.y)<180&&Math.abs(b.x-a.x)<280);
+      const friends=characters.filter(b=>b!==a&&(b.fearUntil??0)<=time&&visible(b)&&!b.intent&&!['stepping','landing','tapping','recoiling'].includes(b.state)&&!b.chase&&!b.flee&&b.grounded&&b.state!=='anticipating'&&Math.abs(b.y-a.y)<180&&Math.abs(b.x-a.x)<280);
       const b=friends[Math.floor(Math.random()*friends.length)];
       if(!b)continue;
       a.attention={x:b.x,y:b.y-35};b.attention={x:a.x,y:a.y-35};a.facing=b.x>a.x?1:-1;b.facing=-a.facing;
       const surface=environment.surfaces.find(s=>s.id===a.platform);
-      const distance=Math.abs(a.x-b.x),pick=Math.random();
-      if(Math.random()<.65){
+      const distance=Math.abs(a.x-b.x);
+      if(a.platform===b.platform&&surface&&distance>65&&surface.right-surface.left>180&&Math.random()<.45){
         a.departure=b.departure=undefined;
+        a.tagRounds=b.tagRounds=0;
         a.chase={id:b.id,until:time+12+Math.random()*10};b.flee={id:a.id,until:a.chase.until};
         a.destination=b.platform??undefined;
         if(a.grounded)state(a,'looking',.15);
-        if(b.grounded)state(b,'looking',.3);
+        if(b.grounded&&surface&&a.platform===b.platform){
+          const direction=b.x>=a.x?1:-1;
+          b.goal={x:direction>0?surface.right-14:surface.left+14,surface:surface.id};
+          state(b,'running',3);
+        }else if(b.grounded)state(b,'looking',.3);
       }else if(a.platform===b.platform&&surface&&distance>65){
         a.goal={x:clamp(b.x-a.facing*34,surface.left+14,surface.right-14),surface:surface.id};
         state(a,a.personality.energy>.6?'running':'walking',4);
         state(b,'waving',1+Math.random());
-      }else if(a.platform===b.platform&&surface&&pick<a.personality.playfulness*.6&&surface.right-surface.left>140){
-        const direction=Math.random()<.5?-1:1;
-        const end=direction===1?surface.right-20:surface.left+20;
-        a.goal={x:end,surface:surface.id};b.goal={x:clamp(end-direction*36,surface.left+12,surface.right-12),surface:surface.id};
-        state(a,'running',3);state(b,'running',3.4);
       }else{
-        state(a,distance<65&&pick>.45?'sitting':'waving',2+Math.random()*2);
-        state(b,a.state==='sitting'?'sitting':'waving',2.4+Math.random()*2);if(b.intent)b.intent.remaining+=.45;
+        a.goal=b.goal=null;a.vx=b.vx=0;
+        state(a,distance<35?'reaching':'waving',1.2+Math.random());
+        state(b,distance<35?'reaching':'waving',1.5+Math.random());if(b.intent)b.intent.remaining+=.45;
       }
       a.cooldown=b.cooldown=4;b.socialAt=time+6+Math.random()*10;
       break;
@@ -269,7 +339,7 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
     held.vx=clamp((nextX-held.x)/dt,-450,450);held.vy=clamp((nextY-held.y)/dt,-500,500);held.x=nextX;held.y=nextY;
     held.attention={x:x+scrollX,y:y+scrollY};lastDrag=now;render();
   };
-  const release=()=>{if(!held)return;const c=held;held=undefined;if(performance.now()-lastDrag>100)c.vx=c.vy=0;c.state='falling';c.cooldown=2;c.sectionSince=time;render();};
+  const release=()=>{if(!held)return;const c=held;held=undefined;if(performance.now()-lastDrag>100)c.vx=c.vy=0;c.state='falling';orientCharacter(c);c.cooldown=2;c.sectionSince=time;render();};
   const greet=(id:number)=>{const c=characters.find(item=>item.id===id);if(c?.grounded){c.goal=null;state(c,'waving',2);c.cooldown=3;}};
   return {grab,drag,release,greet,setPaused(value:boolean){paused=value;},setDebug(value:boolean){debug=value;},destroy(){destroyed=true;cancelAnimationFrame(frame);environment.destroy();window.removeEventListener('resize',resize);window.removeEventListener('pointermove',pointer);document.removeEventListener('pointerleave',leave);document.removeEventListener('visibilitychange',visibility);ctx.clearRect(0,0,canvas.width,canvas.height);}};
 }
