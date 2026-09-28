@@ -5,7 +5,7 @@ export type Character = {
   id:number; color:string; scale:number; personality:Personality;
   x:number; y:number; vx:number; vy:number; facing:number; state:State; timer:number; phase:number;
   platform:number|null; goal:{x:number;surface:number}|null; jump:{vx:number;vy:number}|null;
-  stepFrom?:{x:number;y:number;targetX:number;targetY:number;surface:number}; fearUntil?:number; route?:number[]; tagRounds?:number; tagTarget?:number; tagContact?:boolean; cursorNotice?:number; sitAfterWalk?:boolean; attention?:{x:number;y:number}; intent?:{state:State;duration:number;remaining:number}; impact?:number;
+  focus?:{id:number;until:number}; stepFrom?:{x:number;y:number;targetX:number;targetY:number;surface:number}; fearUntil?:number; route?:number[]; tagRounds?:number; tagTarget?:number; tagContact?:boolean; cursorNotice?:number; sitAfterWalk?:boolean; attention?:{x:number;y:number}; intent?:{state:State;duration:number;remaining:number}; impact?:number;
   journeyUntil?:number; sectionSince?:number; lastSection?:string; recentSections?:string[]; travelDirection?:number;
   departure?:{surface:number;x:number}; ignoreSurface?:number; destination?:number; chase?:{id:number;until:number}; flee?:{id:number;until:number}; jumpStyle?:number;
   socialAt?:number; lastAction?:State; climbFrom?:{x:number;y:number;duration:number;edge?:number};

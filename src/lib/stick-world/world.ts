@@ -107,8 +107,8 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
     }
     const pick=Math.random();
     if(pick<(1-c.personality.energy)*.4&&c.lastAction!=='sitting'){c.sitAfterWalk=true;c.goal={x:Math.random()<.5?platform.left+9:platform.right-9,surface:platform.id};state(c,'walking',8);}
-    else if(pick<(1-c.personality.energy)*.5&&c.lastAction!=='sleeping'&&behavior.rareEvents&&platform.right-platform.left>160){c.vx=0;state(c,'sleeping',4+Math.random()*5);}
-    else if(pick<.4){c.vx=0;state(c,'looking',2);}
+    else if(pick<(1-c.personality.energy)*.5&&behavior.rareEvents){c.vx=0;c.goal=null;state(c,'looking',2.5);}
+    else if(pick<.4){c.vx=0;c.goal=null;state(c,'looking',2);}
     else {c.goal={x:platform.left+12+Math.random()*Math.max(1,platform.right-platform.left-24),surface:platform.id};state(c,Math.random()<c.personality.playfulness*.3?'running':'walking',3+Math.random()*5);}
     c.lastAction=c.state;
   }
@@ -118,13 +118,14 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
     c.timer-=dt;c.cooldown-=dt;
     const pointerSpeed=performance.now()-cursor.lastMoved>200?0:cursor.speed;
     const cursorDistance=Math.hypot(cursor.x-c.x,cursor.y-(c.y-35));
-    const noticesCursor=behavior.cursorAwareness&&cursor.active&&cursorDistance<180&&visible(c);
+    const focused=c.focus&&c.focus.until>time?characters.find(b=>b.id===c.focus?.id):undefined;
+    const noticesCursor=!focused&&behavior.cursorAwareness&&cursor.active&&cursorDistance<180&&visible(c);
     if(noticesCursor){
       c.cursorNotice=(c.cursorNotice??0)+dt;
       c.attention={x:cursor.x,y:cursor.y};
     }else{
       c.cursorNotice=0;
-      const friend=characters.find(b=>b.id===c.chase?.id||b.id===c.flee?.id);
+      const friend=focused??characters.find(b=>b.id===c.chase?.id||b.id===c.flee?.id);
       c.attention=friend?{x:friend.x,y:friend.y-40}:c.goal?{x:c.goal.x,y:environment.surfaces.find(s=>s.id===c.goal?.surface)?.top??c.y-40}:undefined;
     }
     orientCharacter(c);
@@ -170,11 +171,14 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
     if(c.chase&&c.chase.until<=time)c.chase=undefined;
     if(c.flee&&c.flee.until<=time)c.flee=undefined;
     const quarry=c.chase?characters.find(b=>b.id===c.chase?.id):undefined;
-    if(quarry&&c.cooldown<=0&&c.grounded&&quarry.grounded&&c.platform===quarry.platform&&platform&&!['anticipating','landing'].includes(c.state)){
+    if(quarry&&c.cooldown<=0&&c.grounded&&quarry.grounded&&c.platform===quarry.platform&&platform&&!['anticipating','landing','waving'].includes(c.state)){
       const distance=Math.abs(c.x-quarry.x);
-      if(distance<26){
+      if(distance<20){
         c.chase=undefined;quarry.flee=undefined;c.vx*=.4;quarry.vx*=.4;
         c.attention={x:quarry.x,y:quarry.y-32};quarry.attention={x:c.x,y:c.y-32};
+        c.focus={id:quarry.id,until:time+1.5};quarry.focus={id:c.id,until:time+1.5};
+        c.goal=quarry.goal=null;c.intent=quarry.intent=undefined;c.vx=quarry.vx=0;
+        c.facing=quarry.x>c.x?1:-1;quarry.facing=-c.facing;
         c.tagTarget=quarry.id;c.tagContact=false;state(c,'tapping',.7);state(quarry,'looking',.8);
         c.socialAt=quarry.socialAt=time+8;c.cooldown=quarry.cooldown=3;
       }else{c.goal={x:clamp(quarry.x,platform.left+12,platform.right-12),surface:platform.id};state(c,'running',2);}
@@ -262,11 +266,12 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
     if(!behavior.socialInteractions)return;
     // Each character has its own social clock; pairs are not selected by array order.
     for(const a of [...characters].sort(()=>Math.random()-.5)){
-      if(a.intent||(a.fearUntil??0)>time||['stepping','landing','tapping','recoiling'].includes(a.state)||!visible(a)||a.chase||a.flee||!a.grounded||time<(a.socialAt??0)||a.state==='anticipating')continue;
+      if(a.intent||!['idle','looking','sitting'].includes(a.state)||(a.fearUntil??0)>time||['stepping','landing','tapping','recoiling'].includes(a.state)||!visible(a)||a.chase||a.flee||!a.grounded||time<(a.socialAt??0)||a.state==='anticipating')continue;
       a.socialAt=time+5+Math.random()*12/(.4+a.personality.sociability);
-      const friends=characters.filter(b=>b!==a&&(b.fearUntil??0)<=time&&visible(b)&&!b.intent&&!['stepping','landing','tapping','recoiling'].includes(b.state)&&!b.chase&&!b.flee&&b.grounded&&b.state!=='anticipating'&&Math.abs(b.y-a.y)<180&&Math.abs(b.x-a.x)<280);
+      const friends=characters.filter(b=>b!==a&&b.platform===a.platform&&['idle','looking','sitting'].includes(b.state)&&(b.fearUntil??0)<=time&&visible(b)&&!b.intent&&!['stepping','landing','tapping','recoiling'].includes(b.state)&&!b.chase&&!b.flee&&b.grounded&&b.state!=='anticipating'&&Math.abs(b.y-a.y)<180&&Math.abs(b.x-a.x)<280);
       const b=friends[Math.floor(Math.random()*friends.length)];
       if(!b)continue;
+      a.focus={id:b.id,until:time+3};b.focus={id:a.id,until:time+3};
       a.attention={x:b.x,y:b.y-35};b.attention={x:a.x,y:a.y-35};a.facing=b.x>a.x?1:-1;b.facing=-a.facing;
       const surface=environment.surfaces.find(s=>s.id===a.platform);
       const distance=Math.abs(a.x-b.x);
@@ -275,7 +280,7 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
         a.tagRounds=b.tagRounds=0;
         a.chase={id:b.id,until:time+12+Math.random()*10};b.flee={id:a.id,until:a.chase.until};
         a.destination=b.platform??undefined;
-        if(a.grounded)state(a,'looking',.15);
+        if(a.grounded){a.goal=null;a.vx=0;state(a,'waving',.9);a.cooldown=1.1;}
         if(b.grounded&&surface&&a.platform===b.platform){
           const direction=b.x>=a.x?1:-1;
           b.goal={x:direction>0?surface.right-14:surface.left+14,surface:surface.id};
@@ -290,7 +295,7 @@ export function createStickWorld(canvas:HTMLCanvasElement,config:Config={}) {
         state(a,distance<35?'reaching':'waving',1.2+Math.random());
         state(b,distance<35?'reaching':'waving',1.5+Math.random());if(b.intent)b.intent.remaining+=.45;
       }
-      a.cooldown=b.cooldown=4;b.socialAt=time+6+Math.random()*10;
+      a.cooldown=a.chase?1.1:4;b.cooldown=4;b.socialAt=time+6+Math.random()*10;
       break;
     }
   }
