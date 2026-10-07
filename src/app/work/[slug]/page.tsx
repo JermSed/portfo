@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import ProjectDrawing from '../../../components/ProjectDrawing';
 import { projectStories, type ProjectSlug } from '../../../data/project-stories';
 import { projects } from '../../../data/resume';
-export function generateStaticParams(){return Object.keys(projectStories).map(slug=>({slug}));}
+export function generateStaticParams(){return Object.keys(projectStories).filter(slug=>slug!=='buckit').map(slug=>({slug}));}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const story=projectStories[slug as ProjectSlug];return {title:story?.name??'Project'};}
 export default async function ProjectPage({params}:{params:Promise<{slug:string}>}){
   const {slug}=await params;

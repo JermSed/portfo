@@ -1,4 +1,12 @@
 export const projectStories = {
+  buckit: {
+    name: 'Buckit', category: 'Mac utility / 2026', headline: 'Your everyday files and links, always within reach.',
+    problem: 'Switching between forms, Finder, and browser tabs makes small tasks feel scattered.',
+    built: 'A menu bar app that opens a movable floating panel with Option + Space. Keep files and links in color-coded Spaces, search them, and drag files in or out as you work.',
+    challenge: 'Keeping a compact panel useful while other apps stay in focus.',
+    result: 'A quick, persistent place for the resources you use most.',
+    flow: ['Press Option + Space', 'Choose a Space', 'Search or drag an item', 'Keep working'],
+  },
   sceneflow: {
     name: 'SceneFlow', category: 'Creative software / 2026–Present', headline: 'From storyboard to editing timeline.',
     problem: 'A storyboard captures the intent of a film, but turning raw footage into an edit means finding and sequencing clips that match that plan. SceneFlow connects those two stages.',

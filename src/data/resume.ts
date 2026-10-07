@@ -151,6 +151,11 @@ export const involvement: Involvement[] = [
 
 export const projects: Project[] = [
   {
+    name: 'Buckit',
+    description: 'A macOS menu bar home for the links and files you reach for throughout the day.',
+    tech: ['macOS', 'Swift', 'SwiftUI'],
+  },
+  {
     name: 'SceneFlow',
     description:
       'AI-powered filmmaking platform — connects storyboards and raw footage to agent-selected clips and editable DaVinci Resolve timelines.',

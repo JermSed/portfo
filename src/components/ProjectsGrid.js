@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import ProjectDrawing from './ProjectDrawing';
 import { projectStories } from '../data/project-stories';
+import Image from 'next/image';
 
 export default function ProjectsGrid({ items }) {
   if (!items?.length) return null;
@@ -12,7 +13,7 @@ export default function ProjectsGrid({ items }) {
       const [slug,story]=entry;
       return <article key={slug} className="portfolio-project project-card">
         <Link href={`/work/${slug}`} className="project-case-link" aria-label={`${project.name} — read case study`}>
-          <div className={`project-cover project-card-${i}`}><ProjectDrawing name={project.name}/><span className="cover-caption">Concept / workflow</span></div>
+          <div className={`project-cover project-card-${i}`}>{slug==='buckit'?<Image src="/buckit/buckit-job-search.jpg" alt="Buckit floating over a job application email with a resume, portfolio, and job description ready" width={1280} height={720} className="buckit-card-image"/>:<ProjectDrawing name={project.name}/>}<span className="cover-caption">{slug==='buckit'?'Buckit for macOS':'Concept / workflow'}</span></div>
           <div className="project-summary"><div className="project-title-row"><h3>{project.name}</h3><span aria-hidden="true">↗</span></div><p className="project-subtitle">{story.headline}</p><p>{project.description}</p><ul className="project-tags" aria-label="Technologies">{project.tech.map(tech=><li key={tech}>{tech}</li>)}</ul><span className="case-study-label">Read case study <span aria-hidden="true">→</span></span></div>
         </Link>
       </article>;
