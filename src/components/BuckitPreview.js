@@ -43,6 +43,6 @@ export default function BuckitPreview({ hero = false }) {
     </video>
     {hero ? <button type="button" className="buckit-play-toggle" onClick={toggle} aria-label={playing ? 'Pause product demo' : 'Play product demo'}>
       <span aria-hidden="true">{playing ? 'Ⅱ' : '▶'}</span>
-    </button> : <span className="buckit-preview-hint" aria-hidden="true">Hover to preview</span>}
+    </button> : null}
   </div>;
 }

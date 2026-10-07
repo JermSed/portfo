@@ -24,7 +24,7 @@ export default function BuckitPage() {
       </div>
       <div className="buckit-hero-film">
         <BuckitPreview hero />
-        <p>An animated look at Buckit <span>Hover or press play</span></p>
+        <p>Animated demo <span>Hover to play</span></p>
       </div>
     </section>
 
