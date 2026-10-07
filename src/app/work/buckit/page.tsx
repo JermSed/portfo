@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import BuckitPreview from '../../../components/BuckitPreview';
 
 const download = '/buckit/Buckit-0.1.1-macos-arm64.dmg';
 
@@ -22,11 +23,8 @@ export default function BuckitPage() {
         <p className="buckit-requirements">Buckit 0.1.1 · macOS 14+ · Apple Silicon</p>
       </div>
       <div className="buckit-hero-film">
-        <video controls playsInline preload="metadata" poster="/buckit/buckit-preview.jpg" aria-label="Buckit demo showing its floating panel beside an application email">
-          <source src="/buckit/buckit-preview.webm" type="video/webm" />
-          <source src="/buckit/buckit-preview.mp4" type="video/mp4" />
-        </video>
-        <p>See Buckit in action <span aria-hidden="true">↗</span></p>
+        <BuckitPreview hero />
+        <p>An animated look at Buckit <span>Hover or press play</span></p>
       </div>
     </section>
 
