@@ -6,32 +6,48 @@ const download = '/buckit/Buckit-0.1.1-macos-arm64.dmg';
 
 export const metadata: Metadata = {
   title: 'Buckit for Mac',
-  description: 'Keep your frequently used links and files within reach in a floating macOS panel.',
+  description: 'Your everyday files and links, one shortcut away. Buckit is a floating workspace for macOS.',
 };
 
 export default function BuckitPage() {
-  return <article className="case-study buckit-page">
-    <Link href="/#projects" className="text-link">← Selected work</Link>
-    <header className="buckit-intro">
-      <p className="eyebrow">Mac utility / Buckit 0.1.1</p>
-      <h1>Buckit</h1>
-      <p className="case-deck">The things you reach for, one shortcut away.</p>
-      <p className="buckit-lede">Keep frequently used links and files close while you work. Press <kbd>⌥ Space</kbd> to open Buckit’s floating panel, then get what you need without losing your place.</p>
+  return <article className="buckit-landing">
+    <Link href="/#projects" className="text-link buckit-back">← Selected work</Link>
+
+    <section className="buckit-hero" aria-labelledby="buckit-title">
+      <div className="buckit-hero-copy">
+        <div className="buckit-brand"><Image src="/buckit/buckit-mark.png" alt="" width={38} height={38} /><span>Buckit for Mac</span></div>
+        <h1 id="buckit-title">Keep it<br/><em>within reach.</em></h1>
+        <p>Links, files, and the little things you need all day. Bring them up with <kbd>⌥ Space</kbd>, then keep moving.</p>
+        <a className="buckit-download" href={download} download>Download for Mac <span aria-hidden="true">↓</span></a>
+        <p className="buckit-requirements">Buckit 0.1.1 · macOS 14+ · Apple Silicon</p>
+      </div>
+      <div className="buckit-hero-film">
+        <video controls playsInline preload="metadata" poster="/buckit/buckit-preview.jpg" aria-label="Buckit demo showing its floating panel beside an application email">
+          <source src="/buckit/buckit-preview.webm" type="video/webm" />
+          <source src="/buckit/buckit-preview.mp4" type="video/mp4" />
+        </video>
+        <p>See Buckit in action <span aria-hidden="true">↗</span></p>
+      </div>
+    </section>
+
+    <div className="buckit-quickline" aria-label="Buckit highlights"><span>⌥ Space to open</span><span>Color-coded Spaces</span><span>Search in a moment</span><span>Drag files in and out</span></div>
+
+    <section className="buckit-story" aria-labelledby="buckit-story-title">
+      <p className="eyebrow">A place for the things in between</p>
+      <h2 id="buckit-story-title">One application.<br/>Everything at hand.</h2>
+      <p>You’re filling out a job application. One role needs a design resume; another needs a technical one. Your portfolio link and the job description are in different tabs. Put them in a Job Search Space, open Buckit over the form, and drag the right file straight in.</p>
+      <div className="buckit-resource-row" aria-label="Example resources"><span><b className="buckit-resource-dot buckit-purple"/>Resumes</span><span><b className="buckit-resource-dot buckit-blue"/>Portfolio link</span><span><b className="buckit-resource-dot buckit-orange"/>Job descriptions</span></div>
+    </section>
+
+    <section className="buckit-feature-grid" aria-label="How Buckit works">
+      <div><p className="eyebrow">01 / Make room</p><h3>Spaces for every context.</h3><p>Group what you need in color-coded Spaces. Buckit begins with one empty Default Space, ready to make your own.</p></div>
+      <div><p className="eyebrow">02 / Find it fast</p><h3>Search without switching.</h3><p>Open the floating panel with <kbd>⌥ Space</kbd>, search your items, and get back to what you were doing.</p></div>
+      <div><p className="eyebrow">03 / Stay in flow</p><h3>Take it with you.</h3><p>Move the panel out of the way. It stays visible across apps while you drag files into or out of it.</p></div>
+    </section>
+
+    <section className="buckit-install" aria-labelledby="buckit-install-title">
+      <div><p className="eyebrow">Ready when you are</p><h2 id="buckit-install-title">Make space for Buckit.</h2><p>Download the DMG, open it, and drag Buckit into Applications. Launch it from Applications, then press <kbd>⌥ Space</kbd>.</p><p className="buckit-trust">Developer ID signed · Apple notarized · Stapled</p></div>
       <a className="buckit-download" href={download} download>Download for Mac <span aria-hidden="true">↓</span></a>
-      <p className="buckit-requirements">Version 0.1.1 · macOS 14 or later · Apple Silicon</p>
-    </header>
-
-    <figure className="buckit-visual">
-      <Image src="/buckit/buckit-job-search.jpg" alt="Buckit floating beside a job application email, showing a resume PDF, portfolio link, and job description in a Job Search Space" width={1280} height={720} priority />
-      <figcaption>Buckit stays at hand while you work in another app.</figcaption>
-    </figure>
-
-    <div className="case-sections">
-      <section><h2 className="eyebrow">01 / In practice</h2><p>Filling out job applications? Keep several versions of your resume, your portfolio link, and the job description together in a Job Search Space. Open Buckit over the form, drag in the right resume, copy the link, and carry on.</p></section>
-      <section><h2 className="eyebrow">02 / How it works</h2><div><p>Organize resources into color-coded Spaces and search to find an item quickly. Drag files into Buckit to keep them handy, or drag them out into another app. Move the panel out of the way and leave it visible as you switch apps.</p><p>Buckit starts with one empty Default Space, ready for your own files and links.</p></div></section>
-      <section><h2 className="eyebrow">03 / Install</h2><div><ol className="buckit-steps"><li>Download the DMG and open it.</li><li>Drag Buckit into Applications.</li><li>Open Buckit, then press <kbd>⌥ Space</kbd> to bring up the panel.</li></ol><p className="buckit-trust">The DMG is Developer ID signed, Apple notarized, and stapled.</p></div></section>
-    </div>
-    <a className="buckit-download buckit-download-bottom" href={download} download>Download for Mac <span aria-hidden="true">↓</span></a>
-    <Link href="/#projects" className="text-link">Back to all work ↗</Link>
+    </section>
   </article>;
 }
