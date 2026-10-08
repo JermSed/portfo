@@ -1,8 +1,6 @@
 import Link from 'next/link';
-import ProjectDrawing from './ProjectDrawing';
+import ProjectDemo from './ProjectDemo';
 import { projectStories } from '../data/project-stories';
-import BuckitPreview from './BuckitPreview';
-import SceneFlowPreview from './SceneFlowPreview';
 
 export default function ProjectsGrid({ items }) {
   if (!items?.length) return null;
@@ -14,8 +12,8 @@ export default function ProjectsGrid({ items }) {
       const [slug,story]=entry;
       return <article key={slug} className="portfolio-project project-card">
         <Link href={`/work/${slug}`} className="project-case-link" aria-label={`${project.name}: view project`}>
-          <div className={`project-cover project-card-${i}`}>{slug==='buckit'?<BuckitPreview/>:slug==='sceneflow'?<SceneFlowPreview/>:<ProjectDrawing name={project.name}/>}<span className="cover-caption">{slug==='buckit'?'Buckit for macOS':'Concept / workflow'}</span></div>
-          <div className="project-summary"><div className="project-title-row"><h3>{project.name}</h3><span aria-hidden="true">↗</span></div><p className="project-subtitle">{story.headline}</p><p>{project.description}</p><ul className="project-tags" aria-label="Technologies">{project.tech.map(tech=><li key={tech}>{tech}</li>)}</ul><span className="case-study-label">View project <span aria-hidden="true">→</span></span></div>
+          <div className={`project-cover project-card-${i}`}><ProjectDemo slug={slug}/></div>
+          <div className="project-summary"><div className="project-title-row"><h3>{project.name}</h3><span aria-hidden="true">↗</span></div><p className="project-subtitle">{story.headline}</p><span className="case-study-label">View project <span aria-hidden="true">→</span></span></div>
         </Link>
       </article>;
     })}</div>

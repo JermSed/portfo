@@ -40,7 +40,7 @@ export const projectStories = {
     flow: ['Inventory & variants', 'Threshold alerts', 'Automated reordering', 'Real-time dashboards'],
   },
   'climate-cents': {
-    name: 'Climate Cents', category: 'Environment / Data visualization', headline: 'Making local air quality visible.',
+    name: 'Climate Cents', category: 'Environment / Data visualization', headline: 'Local climate action, on the map.',
     problem: 'Air-quality data needs geographic context to be useful to people exploring conditions around them.',
     built: 'An interactive map for Blue Sky LA with a heatmap overlay and real-time air-quality information.',
     challenge: 'Presenting live environmental data through a map while improving load performance, using Cloudflare, Next.js, and TypeScript.',

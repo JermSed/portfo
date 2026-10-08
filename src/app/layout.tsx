@@ -24,8 +24,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   // The browser chrome should follow the page rather than fight it.
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f7f4ed' },
-    { media: '(prefers-color-scheme: dark)', color: '#1b1a18' },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#141619' },
   ],
 };
 

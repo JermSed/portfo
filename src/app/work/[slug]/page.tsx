@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import ProjectDrawing from '../../../components/ProjectDrawing';
-import SceneFlowPreview from '../../../components/SceneFlowPreview';
+import ProjectDemo from '../../../components/ProjectDemo';
 import { projectStories, type ProjectSlug } from '../../../data/project-stories';
 import { projectLandings } from '../../../data/project-landings';
 import { projects } from '../../../data/resume';
@@ -18,12 +17,14 @@ export default async function ProjectPage({params}:{params:Promise<{slug:string}
     <header className="product-hero">
       <p className="eyebrow">{story.name}</p>
       <h1>{story.headline}</h1>
-      <p className="product-intro">{product.intro}</p>
-      <a className="product-cta" href={project.url ?? '#product-preview'}>{project.url ? (slug==='delphi'?'Explore the source':'Visit '+story.name) : (slug==='sceneflow'?'See it in action':'Explore '+story.name)} <span aria-hidden="true">↗</span></a>
     </header>
-    <div id="product-preview" className={`product-preview${slug==='sceneflow'?' product-preview-video':''}`}>
-      {slug==='sceneflow'?<SceneFlowPreview hero/>:<ProjectDrawing name={story.name}/>}
+    <div id="product-preview" className="product-preview product-preview-video">
+      <ProjectDemo slug={slug} hero />
     </div>
+    <section className="product-overview">
+      <p className="product-intro">{product.intro}</p>
+      {project.url && <a className="product-cta" href={project.url}>{slug==='delphi'?'Explore the source':'Visit '+story.name} <span aria-hidden="true">↗</span></a>}
+    </section>
     <section className="product-benefits" aria-labelledby="benefits-heading">
       <h2 id="benefits-heading">{product.heading}</h2>
       <div>{product.benefits.map(([title,copy])=><section key={title}><h3>{title}</h3><p>{copy}</p></section>)}</div>

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import BuckitPreview from '../../../components/BuckitPreview';
@@ -11,21 +10,16 @@ export const metadata: Metadata = {
 };
 
 export default function BuckitPage() {
-  return <article className="buckit-landing">
-    <Link href="/#projects" className="text-link buckit-back">← Selected work</Link>
-
-    <section className="buckit-hero" aria-labelledby="buckit-title">
-      <div className="buckit-hero-copy">
-        <div className="buckit-brand"><Image src="/buckit/buckit-mark.png" alt="" width={38} height={38} /><span>Buckit for Mac</span></div>
-        <h1 id="buckit-title">Keep it<br/><em>within reach.</em></h1>
-        <p>Links, files, and the little things you need all day. Bring them up with <kbd>⌥ Space</kbd>, then keep moving.</p>
-        <a className="buckit-download" href={download} download>Download for Mac <span aria-hidden="true">↓</span></a>
-        <p className="buckit-requirements">Buckit 0.1.1 · macOS 14+ · Apple Silicon</p>
-      </div>
-      <div className="buckit-hero-film">
-        <BuckitPreview hero />
-        <p>Animated demo <span>Hover to play</span></p>
-      </div>
+  return <article className="product-landing buckit-landing">
+    <Link href="/#projects" className="text-link">← Selected work</Link>
+    <header className="product-hero">
+      <p className="eyebrow">Buckit for Mac</p>
+      <h1>Keep it within reach.</h1>
+    </header>
+    <div id="product-preview" className="product-preview product-preview-video"><BuckitPreview hero /></div>
+    <section className="product-overview">
+      <p className="product-intro">Your files and links, one shortcut away. Open Buckit with <kbd>⌥ Space</kbd>, find what you need, and drag it into the app you’re already using.</p>
+      <div><a className="product-cta" href={download} download>Download for Mac <span aria-hidden="true">↓</span></a><p className="buckit-requirements">Buckit 0.1.1 · macOS 14+ · Apple Silicon</p></div>
     </section>
 
     <div className="buckit-quickline" aria-label="Buckit highlights"><span>⌥ Space to open</span><span>Color-coded Spaces</span><span>Search in a moment</span><span>Drag files in and out</span></div>
