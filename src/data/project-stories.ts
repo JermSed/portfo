@@ -8,12 +8,12 @@ export const projectStories = {
     flow: ['Press Option + Space', 'Choose a Space', 'Search or drag an item', 'Keep working'],
   },
   sceneflow: {
-    name: 'SceneFlow', category: 'Creative software / 2026–Present', headline: 'From storyboard to editing timeline.',
-    problem: 'A storyboard captures the intent of a film, but turning raw footage into an edit means finding and sequencing clips that match that plan. SceneFlow connects those two stages.',
-    built: 'A collaborative pre-production canvas for storyboarding and shot planning, paired with an AI agent that analyzes raw footage against storyboards. The agent selects and sequences matching clips, then generates structured DaVinci Resolve timelines for continued editing.',
-    challenge: 'Carrying creative context from the planning canvas into the editing workflow. Built with Swift and SwiftUI for iPad and macOS, the platform connects storyboards and shot plans to agent-driven clip selection and sequencing.',
-    result: 'An ongoing platform that takes filmmakers from collaborative planning to an editable DaVinci Resolve timeline, keeping the storyboard connected to the footage.',
-    flow: ['Storyboards & shot plans', 'Raw footage analysis', 'Clip selection & sequencing', 'DaVinci Resolve timeline'],
+    name: 'SceneFlow', category: 'Creative software / 2026–Present', headline: 'From storyboard to first cut.',
+    problem: 'A storyboard sets the direction. Getting to an initial edit still means searching through footage, matching shots, and placing clips in order.',
+    built: 'I built a collaborative storyboarding canvas in Swift and SwiftUI for iPad and macOS, alongside an AI agent that connects the shot plan to footage in Google Drive and assembles an editable DaVinci Resolve timeline.',
+    challenge: 'The agent matches footage to storyboard beats instead of filling every slot at any cost. Missing or low-confidence matches stay flagged as unshot, so the filmmaker can see what still needs to be captured.',
+    result: 'SceneFlow is in active development. The demonstrated workflow matches four of eight planned beats and creates a Resolve sequence with four linked video and audio clips. The remaining beats are flagged for follow-up.',
+    flow: ['Storyboard & shot order', 'Google Drive footage', 'Agent matching', 'Editable Resolve timeline'],
   },
   'fccw-crm': {
     name: 'FCCW CRM', category: 'Community / Technical Lead / 2025', headline: 'One system for a connected community.',

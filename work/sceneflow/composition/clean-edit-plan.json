@@ -1,0 +1,61 @@
+{
+  "duration": 12,
+  "fps": 30,
+  "size": [
+    1920,
+    1080
+  ],
+  "status": "Faster revision rendered and integrated",
+  "style": "UI-only demo, neutral SceneFlow workspace, original Resolve colors; no title, captions, or end card",
+  "representation": "User-authorized redesigned demonstration UI. Make cut is conceptual; app source is unchanged. Real footage, storyboard drawings and Resolve output.",
+  "motion": [
+    {
+      "seconds": [
+        0,
+        3
+      ],
+      "action": "Start with populated SceneFlow workspace; move cursor to Make cut"
+    },
+    {
+      "seconds": [
+        3,
+        6.4
+      ],
+      "action": "Click Make cut and match four clips"
+    },
+    {
+      "seconds": [
+        6.4,
+        8
+      ],
+      "action": "Clips move into timeline; reveal real Resolve colors"
+    },
+    {
+      "seconds": [
+        8,
+        11.55
+      ],
+      "action": "Hold on editable Resolve timeline"
+    },
+    {
+      "seconds": [
+        11.55,
+        12
+      ],
+      "action": "Crossfade back to initial UI for looping"
+    }
+  ],
+  "constraints": [
+    "Original files preserved",
+    "No terminal in finished demo",
+    "No claim all 8 beats matched; source result contains four clips",
+    "Resolve preview shown monochrome to remove green while preserving actual sequence",
+    "Review labels/timecodes are not final-video copy"
+  ],
+  "output": "public/sceneflow/sceneflow-demo.mp4",
+  "poster": "public/sceneflow/sceneflow-poster.jpg",
+  "renderCommand": "node work/sceneflow/composition/render.mjs",
+  "verification": [
+    "12 seconds, 1080p, 30fps, H.264; title cards and overlay text removed"
+  ]
+}

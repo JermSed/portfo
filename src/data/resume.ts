@@ -158,7 +158,7 @@ export const projects: Project[] = [
   {
     name: 'SceneFlow',
     description:
-      'AI-powered filmmaking platform — connects storyboards and raw footage to agent-selected clips and editable DaVinci Resolve timelines.',
+      'An AI agent that turns raw footage and a storyboard into an organized, editable DaVinci Resolve timeline.',
     tech: ['Swift', 'SwiftUI', 'AI Agents', 'DaVinci Resolve'],
   },
   {

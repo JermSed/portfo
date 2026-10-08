@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ProjectDrawing from '../../../components/ProjectDrawing';
+import SceneFlowPreview from '../../../components/SceneFlowPreview';
 import { projectStories, type ProjectSlug } from '../../../data/project-stories';
 import { projects } from '../../../data/resume';
 export function generateStaticParams(){return Object.keys(projectStories).filter(slug=>slug!=='buckit').map(slug=>({slug}));}
@@ -12,11 +13,11 @@ export default async function ProjectPage({params}:{params:Promise<{slug:string}
   return <article className="case-study">
     <Link href="/#projects" className="text-link">← Selected work</Link>
     <header><p className="eyebrow">{story.category}</p><h1>{story.name}</h1><p className="case-deck">{story.headline}</p><div className="project-tech">{project.tech.join(' · ')}</div></header>
-    <div className={`case-visual project-card-${Object.keys(projectStories).indexOf(slug)}`}><ProjectDrawing name={story.name}/><p className="eyebrow">Workflow illustration</p></div>
+    <div className={`case-visual project-card-${Object.keys(projectStories).indexOf(slug)}${slug === 'sceneflow' ? ' sceneflow-case-visual' : ''}`}>{slug === 'sceneflow' ? <><SceneFlowPreview hero/><p className="sceneflow-demo-caption">Raw footage + storyboard → SceneFlow AI → DaVinci Resolve.<span>Demo interface concept; actual project footage and timeline.</span></p></> : <><ProjectDrawing name={story.name}/><p className="eyebrow">Workflow illustration</p></>}</div>
     <div className="case-sections">{[['01 / The problem',story.problem],['02 / What I built',story.built]].map(([heading,body])=><section key={heading}><h2 className="eyebrow">{heading}</h2><p>{body}</p></section>)}
-    <section><h2 className="eyebrow">03 / System overview</h2><ol className="case-flow">{story.flow.map(step=><li key={step}>{step}</li>)}</ol></section>
-    <section><h2 className="eyebrow">04 / Technical focus</h2><p>{story.challenge}</p></section>
-    <section><h2 className="eyebrow">05 / Outcome</h2><p>{story.result}</p>{project.url&&<a className="text-link" href={project.url}>{slug==='delphi'?'View source':'Visit project'} ↗</a>}</section></div>
+    {slug !== 'sceneflow' && <section><h2 className="eyebrow">03 / System overview</h2><ol className="case-flow">{story.flow.map(step=><li key={step}>{step}</li>)}</ol></section>}
+    <section><h2 className="eyebrow">{slug === 'sceneflow' ? '03 / Matching without guessing' : '04 / Technical focus'}</h2><p>{story.challenge}</p></section>
+    <section><h2 className="eyebrow">{slug === 'sceneflow' ? '04 / Current status' : '05 / Outcome'}</h2><p>{story.result}</p>{project.url&&<a className="text-link" href={project.url}>{slug==='delphi'?'View source':'Visit project'} ↗</a>}</section></div>
     <Link className="text-link" href="/#projects">Back to all work ↗</Link>
   </article>;
 }
