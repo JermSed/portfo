@@ -18,7 +18,7 @@ const g=(opacity,content,transform='')=>`<g opacity="${clamp(opacity)}" transfor
 const labels=['Wide · The table','Close-up · Roll the dice','Insert · Longest road','Close-up · Settlement','Wide · Reactions','Over shoulder · Cards'];
 function frame(time){
  const t=3+time*1.65;
- const enter=p(t,0,2),focus=p(t,5.5,7.5)*(1-p(t,13,15)),morph=p(t,13.5,15.7),native=p(t,15.3,16.3),end=0;
+ const enter=p(t,0,2),focus=0,morph=p(t,13.5,15.7),native=p(t,15.3,16.3),end=0;
  let s='';
  let app=r(100,264,1720,690,'#f4f4f6',20)+r(100,264,1720,70,'#fafafa',20)+r(100,305,1720,29,'#fafafa',0)+tx(140,309,'SceneFlow',25,'#191a1e',600)+tx(360,309,'Catan night',24,'#73747c')+`<path d="M100 334H1820M512 334V858" stroke="#d9d9df"/>`+tx(140,386,'FOOTAGE',20,'#777880',600)+tx(554,386,'STORYBOARD',20,'#777880',600);
  for(let i=0;i<4;i++){
@@ -51,7 +51,7 @@ function frame(time){
  s+=g(p(t,13.5,13.85)*(1-native)*(1-end),transition);
  const push=1+.025*p(t,16.5,20.5);
  s+=g(native*(1-end),r(100,264,1720,690,'#1d1e22',20)+tx(140,314,'DaVinci Resolve',25,'#d8d8dd')+tx(420,314,'Catan night — SceneFlow Cut',24,'#9899a4')+g(1,im(timeline,155,350,1610,580,"meet"),`translate(960 640) scale(${push}) translate(-960 -640)`));
- let canvas=r(0,0,1920,1080,`rgb(${[244,244,246].map((v,i)=>Math.round(mix(v,[29,30,34][i],p(t,13.5,13.85)))).join(',')})`,0)+g(1,s,'translate(-96 -167) scale(1.1)');
+ let canvas=r(0,0,1920,1080,`rgb(${[244,244,246].map((v,i)=>Math.round(mix(v,[29,30,34][i],p(t,13.5,13.85)))).join(',')})`,0)+g(1,s,'translate(0 -150) scale(1)');
  if(time>11.55)canvas+=g(p(time,11.55,12),frame(0));
  return `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">${canvas}</svg>`;
 }

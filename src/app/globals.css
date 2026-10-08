@@ -1437,3 +1437,26 @@ footer { margin-top: 2rem !important; font-size: .75rem !important; }
 .sceneflow-demo-caption { margin-top:.85rem; font-size:.8rem; line-height:1.7; color:var(--text-secondary); }
 .sceneflow-demo-caption span { display:block; font-size:.7rem; color:var(--text-tertiary); }
 .sceneflow-video-error { position:absolute; bottom:0; background:#101114; color:#fff; padding:1rem; font-size:.85rem; }
+
+/* Product pages lead with the experience and practical benefits. */
+.product-landing { padding:2.5rem 0 5rem; }
+.product-hero { padding:4rem 0 3.5rem; max-width:920px; }
+.product-hero h1 { font-size:clamp(2.8rem,6.5vw,5.8rem); line-height:1.04; letter-spacing:-.055em; margin:1.2rem 0 1.5rem; font-weight:500; text-wrap:balance; }
+.product-intro { max-width:660px; font-size:clamp(1.05rem,2vw,1.3rem); line-height:1.7; color:var(--text-secondary); }
+.product-cta { display:inline-flex; gap:2rem; align-items:center; margin-top:1.8rem; background:var(--text); color:var(--bg); padding:.85rem 1.2rem; border-radius:6px; font-size:.9rem; }
+.product-cta:hover { opacity:.85; }
+.product-preview { scroll-margin-top:6rem; padding:4rem; border:1px solid var(--border); border-radius:14px; background:var(--bg-subtle); }
+.product-preview .project-drawing,.product-preview .scene-diagram { width:100%; max-width:850px; margin:auto; }
+.product-preview-video { padding:0; border:0; background:none; }
+.product-benefits { padding:5rem 0 4rem; }
+.product-benefits > h2 { font-size:clamp(2rem,4vw,3.2rem); letter-spacing:-.04em; margin-bottom:2.3rem; }
+.product-benefits > div { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:2.3rem; }
+.product-benefits h3 { font-size:1.2rem; letter-spacing:-.025em; margin-bottom:.75rem; }
+.product-benefits p { font-size:.95rem; line-height:1.8; color:var(--text-secondary); }
+.product-proof { padding:2.5rem 0; border-block:1px solid var(--border); }
+.product-proof > p { font-size:clamp(1.25rem,2.8vw,2rem); letter-spacing:-.03em; max-width:900px; line-height:1.4; }
+.product-proof > span { display:block; margin-top:1rem; font-size:.8rem; line-height:1.7; color:var(--text-tertiary); }
+.product-bottom { display:flex; flex-wrap:wrap; justify-content:space-between; gap:1rem; font-size:.75rem; color:var(--text-tertiary); }
+.buckit-card-preview video,.buckit-hero-film video { object-fit:contain; }
+.sceneflow-preview video:focus-visible,.buckit-card-preview video:focus-visible { outline:2px solid var(--focus-ring); outline-offset:-4px; }
+@media(max-width:700px) { .product-hero { padding:3rem 0 2.5rem; }.product-benefits { padding:3rem 0; }.product-benefits > div { grid-template-columns:1fr; gap:1.8rem; }.product-preview:not(.product-preview-video) { padding:2rem 1rem; } }

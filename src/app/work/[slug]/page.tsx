@@ -3,21 +3,32 @@ import { notFound } from 'next/navigation';
 import ProjectDrawing from '../../../components/ProjectDrawing';
 import SceneFlowPreview from '../../../components/SceneFlowPreview';
 import { projectStories, type ProjectSlug } from '../../../data/project-stories';
+import { projectLandings } from '../../../data/project-landings';
 import { projects } from '../../../data/resume';
-export function generateStaticParams(){return Object.keys(projectStories).filter(slug=>slug!=='buckit').map(slug=>({slug}));}
+export function generateStaticParams(){return Object.keys(projectLandings).map(slug=>({slug}));}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const story=projectStories[slug as ProjectSlug];return {title:story?.name??'Project'};}
-export default async function ProjectPage({params}:{params:Promise<{slug:string}>}){
+export default async function ProjectPage({params}:{params:Promise<{slug:string}>}) {
   const {slug}=await params;
-  if(!Object.hasOwn(projectStories,slug))notFound();
-  const story=projectStories[slug as ProjectSlug];const project=projects.find(p=>p.name===story.name)!;
-  return <article className="case-study">
+  if(!Object.hasOwn(projectLandings,slug))notFound();
+  const story=projectStories[slug as ProjectSlug];
+  const product=projectLandings[slug as keyof typeof projectLandings];
+  const project=projects.find(p=>p.name===story.name)!;
+  return <article className="product-landing">
     <Link href="/#projects" className="text-link">← Selected work</Link>
-    <header><p className="eyebrow">{story.category}</p><h1>{story.name}</h1><p className="case-deck">{story.headline}</p><div className="project-tech">{project.tech.join(' · ')}</div></header>
-    <div className={`case-visual project-card-${Object.keys(projectStories).indexOf(slug)}${slug === 'sceneflow' ? ' sceneflow-case-visual' : ''}`}>{slug === 'sceneflow' ? <><SceneFlowPreview hero/><p className="sceneflow-demo-caption">Raw footage + storyboard → SceneFlow AI → DaVinci Resolve.<span>Demo interface concept; actual project footage and timeline.</span></p></> : <><ProjectDrawing name={story.name}/><p className="eyebrow">Workflow illustration</p></>}</div>
-    <div className="case-sections">{[['01 / The problem',story.problem],['02 / What I built',story.built]].map(([heading,body])=><section key={heading}><h2 className="eyebrow">{heading}</h2><p>{body}</p></section>)}
-    {slug !== 'sceneflow' && <section><h2 className="eyebrow">03 / System overview</h2><ol className="case-flow">{story.flow.map(step=><li key={step}>{step}</li>)}</ol></section>}
-    <section><h2 className="eyebrow">{slug === 'sceneflow' ? '03 / Matching without guessing' : '04 / Technical focus'}</h2><p>{story.challenge}</p></section>
-    <section><h2 className="eyebrow">{slug === 'sceneflow' ? '04 / Current status' : '05 / Outcome'}</h2><p>{story.result}</p>{project.url&&<a className="text-link" href={project.url}>{slug==='delphi'?'View source':'Visit project'} ↗</a>}</section></div>
-    <Link className="text-link" href="/#projects">Back to all work ↗</Link>
+    <header className="product-hero">
+      <p className="eyebrow">{story.name}</p>
+      <h1>{story.headline}</h1>
+      <p className="product-intro">{product.intro}</p>
+      <a className="product-cta" href={project.url ?? '#product-preview'}>{project.url ? (slug==='delphi'?'Explore the source':'Visit '+story.name) : (slug==='sceneflow'?'See it in action':'Explore '+story.name)} <span aria-hidden="true">↗</span></a>
+    </header>
+    <div id="product-preview" className={`product-preview${slug==='sceneflow'?' product-preview-video':''}`}>
+      {slug==='sceneflow'?<SceneFlowPreview hero/>:<ProjectDrawing name={story.name}/>}
+    </div>
+    <section className="product-benefits" aria-labelledby="benefits-heading">
+      <h2 id="benefits-heading">{product.heading}</h2>
+      <div>{product.benefits.map(([title,copy])=><section key={title}><h3>{title}</h3><p>{copy}</p></section>)}</div>
+    </section>
+    <section className="product-proof"><p>{product.proof}</p><span>{product.status}</span></section>
+    <footer className="product-bottom"><span>{project.tech.join(' · ')}</span><Link href="/#projects" className="text-link">Explore more projects ↗</Link></footer>
   </article>;
 }
