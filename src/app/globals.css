@@ -1493,3 +1493,6 @@ footer { margin-top: 2rem !important; font-size: .75rem !important; }
 
 /* Buckit's wider source fills the card; its project page keeps the full frame. */
 .project-cover .buckit-card-preview video { height:100%; object-fit:cover; }
+
+/* Preserve Buckit’s native 40:21 ratio on its full-size demo, without letterboxing. */
+.product-preview-video .buckit-demo-player video { aspect-ratio:40/21; height:auto; object-fit:cover; }

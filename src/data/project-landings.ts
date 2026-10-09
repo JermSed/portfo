@@ -18,7 +18,7 @@ export const projectLandings = {
     heading: 'Say where you want to go.',
     benefits: [['Start with your intent', 'Ask a question or describe a task aloud, without mapping out every click.'], ['Let the browser agent navigate', 'A coordinating agent breaks down the request and delegates website interactions to a browser agent.'], ['Hear what happens', 'Voice responses and visual narration help make the page and the agent’s actions understandable.']],
     proof: 'Winner, Heart of the Matter track · LA Hacks 2025.',
-    status: 'LA Hacks prototype. Original demo footage, edited into a side-by-side view of the voice interface and browser agent.',
+    status: 'LA Hacks prototype. Recreated workflow based on the application’s interface; captions illustrate the spoken request and response.',
   },
   tally: {
     intro: 'Connect the products you sell to the materials they consume. Tally keeps variants, stock levels, and replenishment needs together so small teams can stay ahead of the next order.',

@@ -12,5 +12,5 @@ const labels = {
 export default function ProjectDemo({ slug, hero = false }) {
   if (slug === 'buckit') return <BuckitPreview hero={hero} />;
   if (slug === 'sceneflow') return <SceneFlowPreview hero={hero} />;
-  return <ProductVideo hero={hero} className="project-demo" src={`/demos/${slug}.mp4?v=real-app-1`} poster={`/demos/${slug}.jpg?v=real-app-1`} label={labels[slug]} />;
+  return <ProductVideo hero={hero} className="project-demo" src={`/demos/${slug}.mp4?v=${slug === 'delphi' ? 'recreated-2' : 'real-app-1'}`} poster={`/demos/${slug}.jpg?v=${slug === 'delphi' ? 'recreated-2' : 'real-app-1'}`} label={labels[slug]} />;
 }
