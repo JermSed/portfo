@@ -1,22 +1,27 @@
-# Portfolio workflow demos
+# Portfolio product demos
 
-Five deterministic, silent, 12-second UI recreations at 1920×1080, 30fps.
-These are illustrative workflow animations, not recordings of live sessions.
-All records, library content, environmental overlays, and amounts are fictional.
-No production credentials or constituent data are used. Disclosure is included on each project page.
+The current exports are actual application recordings, replacing the earlier illustrated workflows.
 
-Run from the portfolio root:
+## Sources
 
-    node work/product-demos/composition/render.mjs
+- FCCW: `/Users/jermsed/Documents/fccw`. Finance overview, sync response, donation and membership charts, product revenue. Local-only fixture records and sync response; no production CRM access. Organization: https://fccwla.org/mission-core-values/
+- RaiseAChild: `/Users/jermsed/Documents/ctc/raise-a-child/rac-frontend`. Existing reporting UI; preferred-language filter applied to a chart. Local fictional report aggregates and authenticated preview shell. No constituent records. Organization: https://www.raiseachild.org/
+- Climate Cents: `/Users/jermsed/Documents/ctc/climate-cents`. Actual Mapbox/project-list UI, search and project selection, with three fictional project locations. Environmental data fetches disabled in the isolated preview; no invented measurements. Partnership: https://www.blueskyla.org/our-mission
+- Tally: `/Users/jermsed/Documents/lava/tally`. Existing sample products; opening the product editor and reviewing variants/material quantities. No changes saved.
+- Delphi: original public LA Hacks demo linked from https://devpost.com/software/delphi-lxes1j — https://www.youtube.com/watch?v=RBP_OAc2pQA. Left panel: seconds 48–60 (voice interface); right: seconds 68–92 at 2x (browser agent). These are different moments edited side by side, not a synchronized recording. The original prototype frontend was also run locally; a live voice-agent execution was not verified.
 
-Pass one or more slugs to render selectively. Editable SVG composition code lives in
-`composition/render.mjs`; review frames in `previews/`; website exports in `public/demos/`.
+The nonprofit applications were run as isolated copies under `/tmp/portfolio-app-previews`; data/auth adapters were changed only in those copies. No production records or credentials are included. FCCW's repository README misidentifies the organization; the portfolio uses the official nonprofit description instead.
 
-Source references inspected (read-only):
-- FCCW: Documents/fccw/src/app/(admin)/_components/Sidebar.tsx and admin/finances/page.tsx. Overview → Shopify orders.
-- Climate Cents: Documents/ctc/climate-cents/src/components/{Sidebar,LayerSelector}.tsx and utils/constants.ts. Project filtering → selection → Heat layer. Map is schematic, not a geographic dataset.
-- Delphi: Documents/delphi/delphi/README.md and frontend/components/audio-input.tsx. Mic/voice visualizer → browser task → spoken response shown as captions. Conversation cards are editorial captions.
-- RaiseAChild: Documents/ctc/raise-a-child/rac-frontend/src/app/components/{constituentfilter,GraphRow,navbar}.tsx. Current Status filter → saved filter → chart. No personal data from the original application.
-- Tally: Documents/lava/tally/app/products/page.tsx and tallyapp/client/src/components/sideBar/sideBar.tsx. Product → variant buffer → save.
+## Rendering
 
-Existing Buckit and SceneFlow exports remain in their own public directories.
+`node work/product-demos/composition/render.mjs` renders the four desktop apps from compact source masters. If local capture frames exist, it assembles those first. Browser captures were taken at 1280×720 and 10fps, then interpolated to 30fps at 1920×1080. Interaction frames contain actual application state, without fabricated cursor overlays.
+
+`node work/product-demos/composition/render-delphi.mjs` renders Delphi from the two trimmed masters. The original portrait recording is preserved locally but not committed. SVG labels remain editable.
+
+- `source/`: captured/trimmed master videos
+- `composition/`: deterministic edit scripts and vector graphics
+- `captures/`: local individual browser frames (ignored)
+- `previews/`: local QA sheets and screenshots (ignored)
+- `../../public/demos/`: H.264, muted, fast-start website exports and posters
+
+Application playback: cards play on hover/focus, project pages loop while visible. Reduced-motion preferences disable automatic playback. No visible play/pause icon.

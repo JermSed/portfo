@@ -16,7 +16,7 @@ export const projectStories = {
     flow: ['Storyboard & shot order', 'Google Drive footage', 'Agent matching', 'Editable Resolve timeline'],
   },
   'fccw-crm': {
-    name: 'FCCW CRM', category: 'Community / Technical Lead / 2025', headline: 'One system for a connected community.',
+    name: 'FCCW CRM', category: 'Community / Technical Lead / 2025', headline: 'Supporting the people who support artists.',
     problem: 'Memberships, donations, and events needed a consistent shared record. Recurring drift between Shopify and the CRM created manual data corrections across a community of more than 3,000 members.',
     built: 'As Technical Lead, I architected a backend that unifies memberships, donations, and events, and led a nine-person engineering team through end-to-end delivery.',
     challenge: 'Keeping Shopify and the CRM consistent over time. I built webhook and reconciliation pipelines using Cloudflare Workers, D1, Hono, and TypeScript to address recurring data drift.',
@@ -24,11 +24,11 @@ export const projectStories = {
     flow: ['Shopify events', 'Webhooks & reconciliation', 'Workers · Hono · D1', 'Unified member records'],
   },
   delphi: {
-    name: 'Delphi', category: 'Accessibility / LA Hacks 2025', headline: 'A conversation with the web.',
+    name: 'Delphi', category: 'Accessibility / LA Hacks 2025', headline: 'Browse the web with your voice.',
     problem: 'Navigating visually structured websites can create barriers for people with visual impairments. Delphi explores how natural-language voice commands can support hands-free browsing.',
     built: 'A voice-driven browsing system that translates natural-language commands into interactions with live webpage elements, built with Gemini, React, and the Web Speech API.',
     challenge: 'Connecting spoken intent to actions on live websites. I tested end-to-end browsing workflows across live sites to validate the path from a voice command to a webpage interaction.',
-    result: 'Won first place in the Healthcare Track at LA Hacks 2025, which received more than 200 submissions overall.',
+    result: 'Won the Heart of the Matter track at LA Hacks 2025.',
     flow: ['Voice command', 'Natural-language interpretation', 'Live webpage elements', 'Hands-free navigation'],
   },
   tally: {

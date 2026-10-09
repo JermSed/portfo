@@ -1471,3 +1471,22 @@ footer { margin-top: 2rem !important; font-size: .75rem !important; }
 .product-benefits { padding-top:4rem; }
 @media(max-width:1050px) { .portfolio-projects { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:650px) { .portfolio-projects { grid-template-columns:1fr; gap:1.3rem; }.product-overview { flex-direction:column; gap:1.5rem; padding-top:2rem; }.product-hero { padding:2.2rem 0 1.5rem; }.project-summary { padding:1rem; } }
+
+.photo-space-toolbar { display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:2rem 0 1rem;color:var(--text-secondary);font-size:.85rem; }
+.photo-space-toolbar [role=group] { display:flex;gap:.2rem;border:1px solid var(--border);border-radius:30px;padding:4px; }
+.photo-space-toolbar button { padding:.5rem .9rem;border-radius:24px; }
+.photo-space-toolbar button[aria-pressed=true] { background:var(--text);color:var(--bg); }
+.photo-space { position:relative;height:70vh;min-height:480px;max-height:850px;overflow:hidden;touch-action:none;cursor:grab;border:1px solid var(--border);border-radius:16px;background:var(--bg-subtle);isolation:isolate; }
+.photo-space:active { cursor:grabbing; }
+.photo-space-item { position:absolute;left:0;top:0;text-align:left;user-select:none;touch-action:none;cursor:inherit; }
+.photo-space-item img { width:100%;height:190px;object-fit:cover;box-shadow:0 8px 25px #00000012;pointer-events:none; }
+.photo-space-item span { display:block;margin-top:.55rem;font-size:.72rem;color:var(--text-secondary); }
+.photo-space-item:focus-visible { outline:3px solid var(--focus-ring);outline-offset:8px; }
+.photo-space-reset { position:absolute;right:1rem;bottom:1rem;z-index:2;background:var(--bg);border:1px solid var(--border);border-radius:24px;padding:.65rem 1rem;font-size:.8rem;cursor:pointer; }
+.photo-space-count { position:absolute;bottom:1.3rem;left:1rem;font-size:.7rem;color:var(--text-secondary);background:var(--bg-subtle);padding:.3rem .5rem;pointer-events:none; }
+@media(max-width:600px) { .photo-space-toolbar { align-items:start; }.photo-space-toolbar p { max-width:190px;font-size:.75rem; }.photo-space { height:65vh;min-height:420px; }.photo-space-count { display:none; } }
+
+.photo-page-header h1 { font-size:clamp(2.5rem,5vw,4rem); }
+.photo-page-intro { margin-top:1rem;font-size:1rem; }
+.photo-page-header { margin-bottom:0; }
+.photo-space-toolbar { margin-top:1.5rem; }
