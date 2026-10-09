@@ -1490,3 +1490,6 @@ footer { margin-top: 2rem !important; font-size: .75rem !important; }
 .photo-page-intro { margin-top:1rem;font-size:1rem; }
 .photo-page-header { margin-bottom:0; }
 .photo-space-toolbar { margin-top:1.5rem; }
+
+/* Buckit's wider source fills the card; its project page keeps the full frame. */
+.project-cover .buckit-card-preview video { height:100%; object-fit:cover; }
