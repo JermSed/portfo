@@ -1472,24 +1472,28 @@ footer { margin-top: 2rem !important; font-size: .75rem !important; }
 @media(max-width:1050px) { .portfolio-projects { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:650px) { .portfolio-projects { grid-template-columns:1fr; gap:1.3rem; }.product-overview { flex-direction:column; gap:1.5rem; padding-top:2rem; }.product-hero { padding:2.2rem 0 1.5rem; }.project-summary { padding:1rem; } }
 
-.photo-space-toolbar { display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:2rem 0 1rem;color:var(--text-secondary);font-size:.85rem; }
-.photo-space-toolbar [role=group] { display:flex;gap:.2rem;border:1px solid var(--border);border-radius:30px;padding:4px; }
-.photo-space-toolbar button { padding:.5rem .9rem;border-radius:24px; }
-.photo-space-toolbar button[aria-pressed=true] { background:var(--text);color:var(--bg); }
-.photo-space { position:relative;height:70vh;min-height:480px;max-height:850px;overflow:hidden;touch-action:none;cursor:grab;border:1px solid var(--border);border-radius:16px;background:var(--bg-subtle);isolation:isolate; }
-.photo-space:active { cursor:grabbing; }
-.photo-space-item { position:absolute;left:0;top:0;text-align:left;user-select:none;touch-action:none;cursor:inherit; }
-.photo-space-item img { width:100%;height:190px;object-fit:cover;box-shadow:0 8px 25px #00000012;pointer-events:none; }
-.photo-space-item span { display:block;margin-top:.55rem;font-size:.72rem;color:var(--text-secondary); }
-.photo-space-item:focus-visible { outline:3px solid var(--focus-ring);outline-offset:8px; }
-.photo-space-reset { position:absolute;right:1rem;bottom:1rem;z-index:2;background:var(--bg);border:1px solid var(--border);border-radius:24px;padding:.65rem 1rem;font-size:.8rem;cursor:pointer; }
-.photo-space-count { position:absolute;bottom:1.3rem;left:1rem;font-size:.7rem;color:var(--text-secondary);background:var(--bg-subtle);padding:.3rem .5rem;pointer-events:none; }
-@media(max-width:600px) { .photo-space-toolbar { align-items:start; }.photo-space-toolbar p { max-width:190px;font-size:.75rem; }.photo-space { height:65vh;min-height:420px; }.photo-space-count { display:none; } }
-
+/* Photography uses the same quiet, editorial layout as the rest of the site. */
+.photo-space-toolbar { display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:2rem 0 1.5rem;color:var(--text-secondary);font-size:.8rem; }
+.photo-space-toolbar [role=group] { display:flex;gap:1.4rem; }
+.photo-space-toolbar button { padding:.5rem 0;border-bottom:1px solid transparent;color:var(--text-tertiary); }
+.photo-space-toolbar button[aria-pressed=true] { border-color:var(--text);color:var(--text); }
+.photo-sequence-track { display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain; }
+.photo-sequence-track::-webkit-scrollbar { display:none; }
+.photo-sequence-frame { flex:0 0 100%;min-width:0;scroll-snap-align:center;cursor:zoom-in;height:clamp(300px,62vh,720px);padding:0;background:transparent; }
+.photo-sequence-frame img { display:block;width:100%;height:100%;object-fit:contain; }
+.photo-sequence-frame:focus-visible { outline:2px solid var(--focus-ring);outline-offset:-3px; }
+.photo-sequence-footer { display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border); }
+.photo-sequence-caption h2 { margin:0;font-size:1rem;font-weight:500;letter-spacing:-.015em; }
+.photo-sequence-caption p { margin:.35rem 0 0;font-size:.8rem;color:var(--text-secondary); }
+.photo-sequence-controls { display:flex;align-items:center;gap:.6rem; }
+.photo-sequence-controls span { font-size:.72rem;font-variant-numeric:tabular-nums;color:var(--text-tertiary);margin-right:.7rem;white-space:nowrap; }
+.photo-sequence-controls button { width:42px;height:42px;border:1px solid var(--border);border-radius:50%;font-size:1.1rem; }
+.photo-sequence-controls button:hover:not(:disabled) { background:var(--bg-subtle); }
+.photo-sequence-controls button:disabled { opacity:.25;cursor:default; }
 .photo-page-header h1 { font-size:clamp(2.5rem,5vw,4rem); }
 .photo-page-intro { margin-top:1rem;font-size:1rem; }
 .photo-page-header { margin-bottom:0; }
-.photo-space-toolbar { margin-top:1.5rem; }
+@media(max-width:600px) { .photo-sequence-frame { height:52vh;min-height:280px;max-height:520px; }.photo-space-toolbar { margin-top:1.5rem; }.photo-sequence-controls { gap:.4rem; }.photo-sequence-controls span { margin-right:.3rem; }.photo-sequence-caption h2 { font-size:.9rem; } }
 
 /* Buckit's wider source fills the card; its project page keeps the full frame. */
 .project-cover .buckit-card-preview video { height:100%; object-fit:cover; }
