@@ -1477,11 +1477,20 @@ footer { margin-top: 2rem !important; font-size: .75rem !important; }
 .photo-space-toolbar [role=group] { display:flex;gap:1.4rem; }
 .photo-space-toolbar button { padding:.5rem 0;border-bottom:1px solid transparent;color:var(--text-tertiary); }
 .photo-space-toolbar button[aria-pressed=true] { border-color:var(--text);color:var(--text); }
-.photo-sequence-track { display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain; }
-.photo-sequence-track::-webkit-scrollbar { display:none; }
-.photo-sequence-frame { flex:0 0 100%;min-width:0;scroll-snap-align:center;cursor:zoom-in;height:clamp(300px,62vh,720px);padding:0;background:transparent; }
-.photo-sequence-frame img { display:block;width:100%;height:100%;object-fit:contain; }
-.photo-sequence-frame:focus-visible { outline:2px solid var(--focus-ring);outline-offset:-3px; }
+/* Finite, staggered prints: native scrolling keeps touch and trackpad motion direct. */
+.photo-sequence-track { display:flex;gap:28px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;overscroll-behavior-x:contain;padding:24px 24px 48px;align-items:flex-start;scroll-padding:24px; }
+.photo-sequence-frame { position:relative;flex:0 0 310px;min-width:0;cursor:zoom-in;padding:10px 10px 14px;background:var(--bg);border:1px solid var(--border);box-shadow:0 3px 8px #0000000c,0 16px 30px #00000008;margin-top:var(--print-offset);transform:rotate(var(--print-tilt));transition:transform .25s ease,box-shadow .25s ease;text-align:left; }
+.photo-sequence-frame:nth-child(3n+2) { flex-basis:360px; }
+.photo-sequence-frame img { display:block;width:100%;height:300px;object-fit:contain;background:var(--bg-subtle); }
+.photo-sequence-frame:nth-child(3n+2) img { height:245px; }
+.photo-print-caption { display:block;padding:12px 3px 0; }
+.photo-print-caption strong { display:block;font-size:.8rem;font-weight:500; }
+.photo-print-caption > span { display:block;font-size:.7rem;color:var(--text-secondary);margin-top:4px;opacity:0;transition:opacity .2s; }
+.photo-sequence-frame:hover,.photo-sequence-frame:focus-visible { z-index:2;transform:translateY(-8px) rotate(0);box-shadow:0 8px 16px #00000010,0 20px 36px #00000012; }
+.photo-sequence-frame:hover .photo-print-caption > span,.photo-sequence-frame:focus-visible .photo-print-caption > span { opacity:1; }
+.photo-sequence-frame:focus-visible { outline:2px solid var(--focus-ring);outline-offset:4px; }
+@media(hover:none) { .photo-print-caption > span { opacity:1; } }
+@media(prefers-reduced-motion:reduce) { .photo-sequence-frame,.photo-print-caption > span { transition:none; }.photo-sequence-frame:hover,.photo-sequence-frame:focus-visible { transform:rotate(var(--print-tilt)); } }
 .photo-sequence-footer { display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border); }
 .photo-sequence-caption h2 { margin:0;font-size:1rem;font-weight:500;letter-spacing:-.015em; }
 .photo-sequence-caption p { margin:.35rem 0 0;font-size:.8rem;color:var(--text-secondary); }
@@ -1493,7 +1502,7 @@ footer { margin-top: 2rem !important; font-size: .75rem !important; }
 .photo-page-header h1 { font-size:clamp(2.5rem,5vw,4rem); }
 .photo-page-intro { margin-top:1rem;font-size:1rem; }
 .photo-page-header { margin-bottom:0; }
-@media(max-width:600px) { .photo-sequence-frame { height:52vh;min-height:280px;max-height:520px; }.photo-space-toolbar { margin-top:1.5rem; }.photo-sequence-controls { gap:.4rem; }.photo-sequence-controls span { margin-right:.3rem; }.photo-sequence-caption h2 { font-size:.9rem; } }
+@media(max-width:600px) { .photo-sequence-track { gap:28px;scroll-snap-type:x proximity;padding:16px 10px 28px; }.photo-sequence-frame,.photo-sequence-frame:nth-child(3n+2) { flex-basis:76vw;max-width:330px;margin-top:12px;transform:none;scroll-snap-align:center; }.photo-sequence-frame img,.photo-sequence-frame:nth-child(3n+2) img { height:300px; }.photo-space-toolbar { margin-top:1.5rem; }.photo-sequence-controls { gap:.4rem; }.photo-sequence-controls span { margin-right:.3rem; }.photo-sequence-caption h2 { font-size:.9rem; } }
 
 /* Buckit's wider source fills the card; its project page keeps the full frame. */
 .project-cover .buckit-card-preview video { height:100%; object-fit:cover; }
