@@ -45,7 +45,7 @@ export type Photo = {
   url: string;
   /** [longitude, latitude] of roughly where the photo was taken */
   coordinates: [number, number];
-  /** What kind of shot it is — drives the pin color on the map */
+  /** What kind of shot it is, drives the pin color on the map */
   category: PhotoCategory;
 };
 
@@ -68,7 +68,7 @@ export const profile: Profile = {
     github: 'https://github.com/jermsed',
   },
   summary:
-    "I'm an engineer focused on building reliable software. I enjoy shipping clear interfaces and have a recent focus on AI-enabled products. I'm currently studying Computer Engineering and Computer Science at USC.                   When I'm not building software, I enjoy doing anything outdoors especially photography and hiking. I'm currently building SceneFlow, an AI-powered pre-production and editing platform for filmmakers, combining my love for film/photography and software engineering.",
+    "I'm studying Computer Engineering and Computer Science at USC. I've interned at Amazon, co-founded Tally, and led development with Code The Change. I'm currently building SceneFlow, a storyboarding and editing app for filmmakers. Outside of software, I enjoy hiking and photography.",
 };
 
 export const workEntries: WorkEntry[] = [
@@ -127,32 +127,32 @@ export const involvement: Involvement[] = [
     name: 'Innovative Design',
     logo: '/logos/innod.png',
     role: 'General Member',
-    period: '2026 — Present',
+    period: '2026 – Present',
   },
   {
     name: 'Code The Change',
     logo: '/logos/codethechange.jpeg',
     role: 'Technical Lead, Developer, VP of Development',
-    period: '2023 — Present',
+    period: '2023 – Present',
   },
   {
     name: 'LavaLab',
     logo: '/logos/lava.jpg',
     role: 'Technical Co-Founder, Mentor',
-    period: '2024 — Present',
+    period: '2024 – Present',
   },
   {
     name: 'ColorStack',
     logo: '/logos/colorstack.png',
     role: 'Member',
-    period: '2023 — Present',
+    period: '2023 – Present',
   },
 ];
 
 export const projects: Project[] = [
   {
     name: 'Buckit',
-    description: 'A macOS menu bar home for the links and files you reach for throughout the day.',
+    description: 'A macOS menu bar app for storing, searching, and dragging files and links.',
     tech: ['macOS', 'Swift', 'SwiftUI'],
   },
   {
@@ -170,14 +170,14 @@ export const projects: Project[] = [
   {
     name: 'Delphi',
     description:
-      'Voice-driven browsing for visually impaired users — translates natural-language commands into interactions with live webpage elements. 1st place, Healthcare Track at LA Hacks 2025.',
+      'A voice-driven browsing system for visually impaired users. Translates natural-language commands into interactions with live webpage elements. 1st place, Healthcare Track at LA Hacks 2025.',
     url: 'https://github.com/brennenho/delphi',
     tech: ['Gemini', 'React', 'Web Speech API'],
   },
   {
     name: 'Tally',
     description:
-      'Automated inventory reordering and real-time stock tracking — recovered $120K+ in client revenue lost to stockouts and cut management overhead 40%.',
+      'Automated inventory reordering and real-time stock tracking that recovered $120K+ in client revenue lost to stockouts and cut management overhead 40%.',
     url: 'https://keeptallyapp.com',
     tech: ['Next.js', 'TypeScript', 'React'],
   },
@@ -318,4 +318,3 @@ export const photos: Photo[] = [
     category: 'nature',
   },
 ];
-

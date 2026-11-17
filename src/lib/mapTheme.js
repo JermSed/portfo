@@ -1,14 +1,14 @@
 /**
  * Map palette.
  *
- * The stock CARTO basemaps are cold and grey — serviceable, but they read as
+ * The stock CARTO basemaps are cold and grey, serviceable, but they read as
  * "a map widget" rather than as part of this page. These palettes retune the
  * same tiles toward the warmer, softer register Apple Maps uses: cream land
  * instead of white, gentle blue water instead of slate, sage parks, and roads
  * that recede until you zoom in far enough to want them.
  *
  * One base style serves both themes and only the colours change, so switching
- * appearance is a repaint rather than a refetch — no blank flash, no reload.
+ * appearance is a repaint rather than a refetch, no blank flash, no reload.
  */
 
 const LIGHT = {

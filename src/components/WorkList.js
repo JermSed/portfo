@@ -8,7 +8,7 @@ export default function WorkList({ items }) {
   return (
     <section aria-labelledby="experience-heading">
       <h2 id="experience-heading" className="eyebrow">
-        02 / Experience
+        Experience
       </h2>
       <div className="mt-6 space-y-7">
         {items.map((job, idx) => (

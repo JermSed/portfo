@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import InvolvementList from '../components/InvolvementList';
 import ProjectsGrid from '../components/ProjectsGrid';
 import ThoughtsList from '../components/ThoughtsList';
@@ -6,17 +7,20 @@ import { involvement, profile, projects, workEntries } from '../data/resume';
 import { getAllThoughts } from '../lib/thoughts';
 
 export default function HomePage() {
-  return <>
-    <header className="work-first-hero">
-      <div className="hero-topline"><span className="eyebrow">Software engineer</span><span className="eyebrow">San Francisco, CA</span></div>
-      <h1>Jeremy <span>Sedillo.</span></h1>
-      <div className="work-first-intro"><p>Building AI tools, creative software,<br />and systems people rely on.</p><a className="round-link" href="#projects" aria-label="Explore selected work">↓</a></div>
-      <div className="personal-intro"><p>I’m a Computer Engineering and Computer Science student at USC. I build software that brings together clear interfaces and reliable systems, from tools for filmmakers to platforms that help nonprofits serve their communities.</p><p>I’ve spent three summers as a software engineering intern at Amazon, co-founded Tally, and led development with Code The Change. I’m currently building SceneFlow, a filmmaking platform that connects collaborative storyboarding with AI-assisted editing.</p><p>Outside of software, I’m usually hiking, exploring somewhere new, or bringing a camera along. </p></div>
-      <p className="hero-credentials">Amazon internships ×3 <span>·</span> USC Computer Engineering &amp; CS <span>·</span> LavaLab</p>
+  return <div className="personal-home">
+    <header className="personal-header">
+      <h1>Jeremy Sedillo</h1>
+      <p>Software engineer · Computer Engineering &amp; CS at USC</p>
+      <span>San Francisco, CA</span>
     </header>
+    <section className="personal-bio" aria-label="About Jeremy">
+      <p>I’m studying Computer Engineering and Computer Science at USC. I’ve spent three summers as a software engineering intern at Amazon, co-founded Tally, and led development with Code The Change.</p>
+      <p>Currently, I’m building <Link href="/work/sceneflow" className="body-link">SceneFlow</Link>, a storyboarding app that matches footage to shots and assembles a DaVinci Resolve timeline. I also made <Link href="/work/buckit" className="body-link">Buckit</Link>, a floating file and link panel for Mac.</p>
+      <p>Outside of software, I enjoy hiking and <Link href="/photos" className="body-link">photography</Link>.</p>
+    </section>
     <div className="page-section" id="projects"><ProjectsGrid items={projects} /></div>
-    <div className="career-grid page-section"><WorkList items={[{...workEntries[0],role:"Software Development Engineer Intern ×3",period:"2024–26"},...workEntries.filter(job=>job.name!=="Amazon")]} /><div><InvolvementList items={involvement} /><div className="resume-note"><span className="eyebrow">Résumé</span><a href="/Jeremy_Sedillo_Resume.pdf" className="body-link">View my résumé ↗</a></div></div></div>
+    <div className="career-grid page-section"><WorkList items={[{...workEntries[0],role:"Software Development Engineer Intern ×3",period:"2024–26"},...workEntries.filter(job=>job.name!=="Amazon")]} /><InvolvementList items={involvement} /></div>
     <div className="page-section journal-section"><ThoughtsList items={getAllThoughts()} /></div>
-    <section className="contact-section"><p className="eyebrow">Contact</p><a href={`mailto:${profile.email}`}>Get in touch.<span>↗</span></a></section>
-  </>;
+    <section className="contact-section"><p className="eyebrow">Contact</p><a href={`mailto:${profile.email}`}>Email me<span>↗</span></a></section>
+  </div>;
 }

@@ -22,7 +22,6 @@ npm start      # Serve the production build
 - `src/data/resume.ts`: profile, projects, experience, photo captions and coordinates.
 - `content/thoughts/*.md`: trusted, repository-authored Markdown with title, date, and cover frontmatter. Do not accept untrusted HTML here.
 - `public/photos`: original photographs. Gallery thumbnails use Next Image optimization; the viewer retains originals.
-- `public/Jeremy_Sedillo_Resume.pdf`: downloadable résumé.
 - `npm run add-photo` and `npm run add-thought`: content helper scripts.
 
 ## Design

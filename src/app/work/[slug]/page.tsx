@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import ProjectCaseStudy from '../../../components/ProjectCaseStudy';
 import ProjectDemo from '../../../components/ProjectDemo';
 import { projectStories, type ProjectSlug } from '../../../data/project-stories';
 import { projectLandings, projectLinks } from '../../../data/project-landings';
@@ -14,10 +15,10 @@ export default async function ProjectPage({params}:{params:Promise<{slug:string}
   const project=projects.find(p=>p.name===story.name)!;
   const destination=projectLinks[slug] ?? (project.url ? {url:project.url,label:'Visit '+story.name} : null);
   return <article className="product-landing">
-    <Link href="/#projects" className="text-link">← Selected work</Link>
+    <Link href="/#projects" className="text-link">← Projects</Link>
     <header className="product-hero">
-      <p className="eyebrow">{story.name}</p>
-      <h1>{story.headline}</h1>
+      <p className="eyebrow">{story.category}</p>
+      <h1>{story.name}</h1>
     </header>
     <div id="product-preview" className="product-preview product-preview-video">
       <ProjectDemo slug={slug} hero />
@@ -26,11 +27,8 @@ export default async function ProjectPage({params}:{params:Promise<{slug:string}
       <p className="product-intro">{product.intro}</p>
       {destination && <a className="product-cta" href={destination.url}>{destination.label} <span aria-hidden="true">↗</span></a>}
     </section>
-    <section className="product-benefits" aria-labelledby="benefits-heading">
-      <h2 id="benefits-heading">{product.heading}</h2>
-      <div>{product.benefits.map(([title,copy])=><section key={title}><h3>{title}</h3><p>{copy}</p></section>)}</div>
-    </section>
-    <section className="product-proof"><p>{product.proof}</p><span>{product.status}</span></section>
-    <footer className="product-bottom"><span>{project.tech.join(' · ')}</span><Link href="/#projects" className="text-link">Explore more projects ↗</Link></footer>
+    <p className="project-demo-note">{product.status}</p>
+    <ProjectCaseStudy slug={slug as ProjectSlug} />
+    <footer className="product-bottom"><span>{project.tech.join(' · ')}</span><Link href="/#projects" className="text-link">All projects ↗</Link></footer>
   </article>;
 }

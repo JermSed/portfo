@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 
 import SiteFooter from '../components/SiteFooter';
 import SiteNav from '../components/SiteNav';
+import SandBackground from '../components/SandBackground';
 import { profile } from '../data/resume';
 
 import './globals.css';
@@ -22,10 +23,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   // The browser chrome should follow the page rather than fight it.
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#141619' },
-  ],
+  themeColor: '#ffffff',
 };
 
 export default function RootLayout({
@@ -34,19 +32,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{__html: `(function(){try{var t=localStorage.getItem('portfolio-theme');document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){document.documentElement.dataset.theme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}})()`}} /></head>
+    <html lang="en" data-theme="light">
       <body>
+        <SandBackground />
         {/* Never trap a keyboard user in the chrome. */}
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        {/* Chrome lives in one place, so it is in the same spot on every page. */}
-        <SiteNav />
         <div className="container-page">
           <main id="main">{children}</main>
           <SiteFooter socials={profile.socials} email={profile.email} />
         </div>
+        <SiteNav />
       </body>
     </html>
   );

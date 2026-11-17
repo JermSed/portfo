@@ -57,7 +57,7 @@ export default function PhotoGallery({ items }) {
     return rect;
   }, []);
 
-  // The thumbnail's intrinsic shape is the viewer's shape — same photo.
+  // The thumbnail's intrinsic shape is the viewer's shape, same photo.
   const aspectFor = useCallback((index) => {
     const node = thumbRefs.current.get(index);
     if (!node?.naturalWidth || !node?.naturalHeight) return null;

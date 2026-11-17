@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 
-// Sparse-to-dense glyph ramp — most cells stay empty so the effect reads
+// Sparse-to-dense glyph ramp, most cells stay empty so the effect reads
 // as drifting wisps of text, not a wall of characters
 const RAMP = [
   ' ', ' ', '.', ',', ':', ';', '·', '~', '-', '=', '!', '?', 'i', 'l',
@@ -33,7 +33,7 @@ function noise2(x, y) {
 }
 
 /**
- * ASCII flow field in the page margins — monospace characters drift
+ * ASCII flow field in the page margins, monospace characters drift
  * upward like smoke, driven by layered noise. Decorative only; hidden
  * on small screens and static for reduced-motion users.
  */

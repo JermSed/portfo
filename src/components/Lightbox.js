@@ -16,7 +16,7 @@ import {
 
 /** Movement before we commit to an axis, so a tap isn't read as a drag. */
 const AXIS_HYSTERESIS = 10;
-/** Below this, the gesture was a hold rather than a throw — fall back to position. */
+/** Below this, the gesture was a hold rather than a throw, fall back to position. */
 const FLICK_VELOCITY = 320;
 
 /**
@@ -33,8 +33,8 @@ const FLICK_VELOCITY = 320;
 export default function Lightbox({ photos, index, sourceRectFor, aspectFor, onIndexChange, onClose }) {
   const photo = photos[index];
   // Reserving the photo's shape up front means the surface has real dimensions
-  // before the bytes arrive, so it can be measured — and grown from the
-  // thumbnail — instead of snapping in at full size once the image decodes.
+  // before the bytes arrive, so it can be measured, and grown from the
+  // thumbnail, instead of snapping in at full size once the image decodes.
   const aspect = aspectFor?.(index) ?? null;
 
   const rootRef = useRef(null);
@@ -70,8 +70,8 @@ export default function Lightbox({ photos, index, sourceRectFor, aspectFor, onIn
    * Measure the surface as if it carried no transform.
    *
    * getBoundingClientRect reports the *visually transformed* box, so measuring
-   * while a spring is mid-flight — or while the surface sits scaled down at the
-   * start of the open animation — would feed the animation its own output. The
+   * while a spring is mid-flight, or while the surface sits scaled down at the
+   * start of the open animation, would feed the animation its own output. The
    * transform is cleared for the duration of the read and put straight back;
    * this runs once per open or close, never per frame.
    */
@@ -133,7 +133,7 @@ export default function Lightbox({ photos, index, sourceRectFor, aspectFor, onIn
 
     if (runFlip()) return;
 
-    // No layout to measure yet — wait for the image rather than letting it
+    // No layout to measure yet, wait for the image rather than letting it
     // appear at full size, which would break the tie to the thumbnail.
     const img = imgRef.current;
     if (!img) {
@@ -164,7 +164,7 @@ export default function Lightbox({ photos, index, sourceRectFor, aspectFor, onIn
 
       const back = flipFromSource();
       if (!back) {
-        // The thumbnail is gone (or off-screen) — leave along the drag instead,
+        // The thumbnail is gone (or off-screen), leave along the drag instead,
         // carrying the velocity the gesture ended with.
         const target = y.get() + project(velocity);
         animate(surfaceOpacity, 0, { duration: 0.2 });
@@ -230,7 +230,7 @@ export default function Lightbox({ photos, index, sourceRectFor, aspectFor, onIn
 
   const onPointerDown = (event) => {
     if (event.button !== 0 || dismissing.current || paging.current) return;
-    // Grabbing mid-flight takes over from wherever the surface currently is —
+    // Grabbing mid-flight takes over from wherever the surface currently is,
     // the springs are never allowed to finish out of the user's control.
     event.currentTarget.setPointerCapture(event.pointerId);
     drag.current = {
@@ -353,7 +353,7 @@ export default function Lightbox({ photos, index, sourceRectFor, aspectFor, onIn
         e.preventDefault();
         goTo(index - 1, -1);
       } else if (e.key === 'Tab') {
-        // Keep focus inside the viewer — there is nothing behind it to reach.
+        // Keep focus inside the viewer, there is nothing behind it to reach.
         const focusable = root?.querySelectorAll('button:not([disabled]), a[href]');
         if (!focusable?.length) return;
         const first = focusable[0];

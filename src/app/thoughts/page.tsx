@@ -5,7 +5,7 @@ import { getAllThoughts } from '../../lib/thoughts';
 
 export const metadata: Metadata = {
   title: 'Thoughts',
-  description: 'Writing and raw thoughts.',
+  description: 'Notes by Jeremy Sedillo.',
 };
 
 export default function ThoughtsPage() {
@@ -19,8 +19,6 @@ export default function ThoughtsPage() {
           Writing · {thoughts.length} {thoughts.length === 1 ? 'thought' : 'thoughts'}
         </p>
       </header>
-
-      <p className="lede mt-10">Things I&apos;ve been thinking about, written down.</p>
 
       <div className="mt-14 space-y-10">
         {thoughts.map((thought) => (
