@@ -22,7 +22,7 @@ export default function SiteFooter({ socials, email }) {
           </li>
         ))}
       </ul>
-      <span className="text-[color:var(--text-tertiary)]">Fight on ✌️</span>
+      <span className="text-[color:var(--text-tertiary)]">Jeremy Sedillo</span>
     </footer>
   );
 }

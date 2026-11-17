@@ -22,9 +22,9 @@ function PhotoCard({ photo, index, onOpen, registerRef }) {
           src={photo.url}
           width={1200}
           height={800}
-          sizes="(max-width: 600px) 45vw, (max-width: 1200px) 48vw, 550px"
+          sizes="(max-width: 600px) calc(100vw - 48px), (max-width: 1200px) 46vw, 540px"
           alt={photo.title}
-          loading="lazy"
+          loading={index < 2 ? 'eager' : 'lazy'}
           decoding="async"
           className="photo-card-image"
         />
@@ -66,26 +66,17 @@ export default function PhotoGallery({ items }) {
 
   if (!items?.length) return null;
 
-  const columns = [
-    items.map((photo, index) => ({ photo, index })).filter(({ index }) => index % 2 === 0),
-    items.map((photo, index) => ({ photo, index })).filter(({ index }) => index % 2 === 1),
-  ];
-
   return (
     <>
-      <div className="photo-grid">
-        {columns.map((column, columnIndex) => (
-          <div key={columnIndex} className={columnIndex === 1 ? 'photo-column photo-column-offset' : 'photo-column'}>
-            {column.map(({ photo, index }) => (
-              <PhotoCard
-                key={photo.title}
-                photo={photo}
-                index={index}
-                onOpen={setOpenIndex}
-                registerRef={registerRef}
-              />
-            ))}
-          </div>
+      <div className="photo-grid" aria-label="Photo gallery">
+        {items.map((photo, index) => (
+          <PhotoCard
+            key={photo.url}
+            photo={photo}
+            index={index}
+            onOpen={setOpenIndex}
+            registerRef={registerRef}
+          />
         ))}
       </div>
       {openIndex !== null && (

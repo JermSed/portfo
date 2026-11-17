@@ -1,24 +1,25 @@
 import type { Metadata } from 'next';
 
-import PhotoSpace from '../../components/PhotoSpace';
+import PhotoGallery from '../../components/PhotoGallery';
 import { getPhotos } from '../../lib/photos';
 
 export const metadata: Metadata = {
   title: 'Photos',
-  description: 'Places I have pointed a camera at.',
+  description: 'Photography by Jeremy Sedillo.',
 };
 
 export default function PhotosPage() {
   const photos = getPhotos();
   return (
-    <>
-      <header className="page-header photo-page-header">
-        <h1>Photos</h1>
-        <p className="eyebrow mt-3">Photography · {photos.length} photos</p>
+    <div className="photo-gallery-page">
+      <header className="gallery-header">
+        <div>
+          <h1>Photos</h1>
+          <p>{photos.length} photographs</p>
+        </div>
+        <a className="body-link" href="https://www.instagram.com/jermpegs/">Instagram ↗</a>
       </header>
-
-      <p className="lede photo-page-intro">Somewhere between here and there. Photographs by me, with more on <a className="body-link" href="https://www.instagram.com/jermpegs/">@jermpegs</a>.</p>
-      <PhotoSpace items={photos} />
-    </>
+      <PhotoGallery items={photos} />
+    </div>
   );
 }
