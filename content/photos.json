@@ -1,0 +1,35 @@
+[
+  {
+    "title": "Kitchen Prep",
+    "location": "San Francisco, California",
+    "category": "city",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/kitchen-prep-a98c3b44.mp4",
+    "coordinates": [
+      2,
+      2
+    ]
+  },
+  {
+    "title": "Seattle Sunset",
+    "location": "Seattle, Washington",
+    "category": "city",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/seattle-sunset-bce7e638.mp4",
+    "coordinates": [
+      2,
+      2
+    ]
+  },
+  {
+    "title": "Beach Ponder",
+    "location": "San Diego, California",
+    "category": "coast",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/beach-ponder-1f5fbed8.mp4",
+    "coordinates": [
+      180,
+      23
+    ]
+  }
+]
