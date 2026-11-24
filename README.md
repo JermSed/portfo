@@ -35,8 +35,8 @@ The atlas uses bundled Natural Earth geometry and needs no external map services
 Run `npm run studio` and open the private link printed in the terminal after the server is ready. The editor runs separately at `127.0.0.1:3001` (override with `STUDIO_PORT`) and uses a separate `.next-studio` build folder. Keep the terminal running while editing; Ctrl+C closes it. A fresh launch creates a new access token and invalidates older sessions.
 
 - **Write a thought:** enter a title, introduction, date, and Markdown body. Save locally, then open the resulting page to review the rendered article.
-- **Add a photo:** choose a JPEG, PNG, or WebP (20 MB maximum), caption it, and choose a saved place or enter a new location with approximate map coordinates. Images are orientation-corrected, resized to a maximum 2000 px edge, and stripped of metadata.
-- Thoughts are saved in `content/thoughts/`; photo entries are appended to `content/photos.json` and images to `public/photos/`. Existing content is preserved. New filenames use unique suffixes.
+- **Add media:** choose a JPEG, PNG, or WebP (20 MB maximum), or an MP4 video (100 MB maximum; H.264 recommended). Add a title and location. Photos are resized and stripped of metadata. MP4 files are preserved without re-encoding and loop muted when visible in the gallery; reduced motion uses manual playback.
+- Thoughts are saved in `content/thoughts/`; media entries are saved in `content/photos.json`, images in `public/photos/`, and videos in `public/videos/`. Existing content is preserved. New filenames use unique suffixes.
 - Saving changes only the repository and local preview. Review, commit, and deploy those files through the usual workflow to update the live site.
 
 The studio is disabled outside development and without the launcher environment. Its page and write endpoints require a temporary HTTP-only, SameSite=Strict session, loopback Host validation, and same-origin POSTs. It has no public navigation link. This protects against website visitors and other devices, not someone who already controls your OS account. Never configure `STUDIO_ENABLED` or `STUDIO_TOKEN` on your hosting provider.

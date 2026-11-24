@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import GalleryVideo from './GalleryVideo';
 import React, { useCallback, useRef, useState } from 'react';
 
 // The viewer (and its spring engine) is only fetched once someone opens a
@@ -39,6 +40,7 @@ function PhotoCard({ photo, index, onOpen, registerRef }) {
 
 export default function PhotoGallery({ items }) {
   const [openIndex, setOpenIndex] = useState(null);
+  const photos = items?.filter(item => item.type !== 'video') ?? [];
   const thumbRefs = useRef(new Map());
 
   const registerRef = useCallback((index, node) => {
@@ -68,20 +70,22 @@ export default function PhotoGallery({ items }) {
 
   return (
     <>
-      <div className="photo-grid" aria-label="Photo gallery">
-        {items.map((photo, index) => (
-          <PhotoCard
-            key={photo.url}
-            photo={photo}
-            index={index}
-            onOpen={setOpenIndex}
-            registerRef={registerRef}
-          />
+      <div className="photo-grid" aria-label="Media gallery">
+        {items.map((item) => item.type === 'video' ? (
+          <figure className="photo-card" key={item.url}>
+            <GalleryVideo src={item.url} title={item.title} />
+            <figcaption className="photo-card-caption">
+              <span className="photo-card-title">{item.title}</span>
+              <span className="photo-card-meta">{item.location} · Video</span>
+            </figcaption>
+          </figure>
+        ) : (
+          <PhotoCard key={item.url} photo={item} index={photos.indexOf(item)} onOpen={setOpenIndex} registerRef={registerRef} />
         ))}
       </div>
       {openIndex !== null && (
         <Lightbox
-          photos={items}
+          photos={photos}
           index={openIndex}
           sourceRectFor={sourceRectFor}
           aspectFor={aspectFor}

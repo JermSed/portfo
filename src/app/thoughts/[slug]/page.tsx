@@ -40,7 +40,7 @@ export default async function ThoughtPage({ params }: Props) {
       {/* The way back out is always visible from the bottom of the piece. */}
       <p className="mt-14">
         <Link href="/thoughts" className="body-link font-sans text-[length:var(--text-small)]">
-          ← All thoughts
+          ← All writing
         </Link>
       </p>
     </>

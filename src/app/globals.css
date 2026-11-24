@@ -1590,3 +1590,10 @@ html { scroll-padding-top: 2rem; scroll-padding-bottom: 6rem; }
 .bottom-nav .site-nav-link { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: .65rem 1.15rem; white-space: nowrap; font-size: .8rem; }
 @media (max-width: 600px) { .container-page, .container-page:has(.personal-home) { padding-top: 2.5rem; } }
 @media print { .bottom-nav { display: none; } }
+
+.media-video { display: block; width: 100%; height: auto; background: #111; border-radius: 0; }
+.studio-preview video { display: block; width: 100%; max-height: 70vh; background: #111; }
+
+.gallery-video { position: relative; }
+.gallery-video-sound { position: absolute; top: .65rem; right: .65rem; min-height: 36px; padding: .45rem .7rem; border: 1px solid #ffffff55; border-radius: 4px; background: #181818d9; color: #fff; font-size: .72rem; }
+.gallery-video-sound:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }

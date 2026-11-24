@@ -40,6 +40,7 @@ export type Involvement = {
 export type PhotoCategory = 'city' | 'nature' | 'coast' | 'night';
 
 export type Photo = {
+  type?: 'photo' | 'video';
   title: string;
   location: string;
   url: string;

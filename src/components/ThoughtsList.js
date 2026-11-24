@@ -7,7 +7,7 @@ export default function ThoughtsList({ items }) {
   return (
     <section aria-labelledby="thoughts-heading" id="thoughts">
       <h2 id="thoughts-heading" className="eyebrow">
-        Thoughts
+        Writing
       </h2>
       <div className="mt-6 space-y-7">
         {items.map((thought) => (

@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 const links = [
   { href: '/', label: 'Work' },
-  { href: '/thoughts', label: 'Thoughts' },
-  { href: '/photos', label: 'Photos' },
+  { href: '/thoughts', label: 'Writing' },
+  { href: '/media', label: 'Media' },
 ];
 
 export default function SiteNav() {

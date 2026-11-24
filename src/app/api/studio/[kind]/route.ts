@@ -23,7 +23,7 @@ export async function POST(request: Request, {params}: {params:Promise<{kind:str
   const {kind}=await params;
   if (!['thought','photo'].includes(kind)) return new Response('Not found',{status:404});
   const length=Number(request.headers.get('content-length'));
-  if (!length || length>22*1024*1024) return NextResponse.json({error:'Please keep uploads under 20 MB.'},{status:413});
+  if (!length || length>102*1024*1024) return NextResponse.json({error:'Please keep uploads under 100 MB.'},{status:413});
   let imagePath='';
   try {
     const form=await request.formData();
@@ -47,23 +47,42 @@ export async function POST(request: Request, {params}: {params:Promise<{kind:str
     const latitude=Number(text('latitude',30)), longitude=Number(text('longitude',30));
     if(!Number.isFinite(latitude)||!Number.isFinite(longitude)||Math.abs(latitude)>90||Math.abs(longitude)>180) throw new Error('Check the map coordinates.');
     const image=form.get('image');
-    if(!(image instanceof File)||!image.size||image.size>20*1024*1024) throw new Error('Choose a photo under 20 MB.');
+    if(!(image instanceof File)||!image.size) throw new Error('Choose a photo or MP4 video.');
+    const video=/\.mp4$/i.test(image.name);
+    if(image.size>(video?100:20)*1024*1024) throw new Error(video?'Choose an MP4 under 100 MB.':'Choose a photo under 20 MB.');
     const input=Buffer.from(await image.arrayBuffer());
-    const decoder=sharp(input,{limitInputPixels:60000000});
-    const metadata=await decoder.metadata();
-    if(!['jpeg','png','webp'].includes(metadata.format||'')) throw new Error('Choose a JPEG, PNG, or WebP photo.');
-    const output=await decoder.rotate().resize({width:2000,height:2000,fit:'inside',withoutEnlargement:true}).jpeg({quality:88,mozjpeg:true}).toBuffer();
-    fs.mkdirSync('public/photos',{recursive:true});
-    imagePath=path.join('public/photos',`${slug}.jpg`);
+    let output: Buffer;
+    if(video) {
+      // Check the container, rather than trusting its filename or MIME type.
+      const boxSize=input.length>=16?input.readUInt32BE(0):0;
+      const brands=['isom','iso2','iso3','iso4','iso5','iso6','mp41','mp42','avc1','M4V '];
+      let compatible=false;
+      if(input.toString('ascii',4,8)==='ftyp' && boxSize>=16 && boxSize<=input.length && boxSize<=4096) {
+        for(let at=8;at+4<=boxSize;at+=4) {
+          if(at!==12 && brands.includes(input.toString('ascii',at,at+4))) compatible=true;
+        }
+      }
+      if(!compatible) throw new Error('This file is not a supported MP4. Export as an H.264 MP4 and try again.');
+      output=input;
+    } else {
+      const decoder=sharp(input,{limitInputPixels:60000000});
+      const metadata=await decoder.metadata();
+      if(!['jpeg','png','webp'].includes(metadata.format||'')) throw new Error('Choose a JPEG, PNG, WebP, or MP4 file.');
+      output=await decoder.rotate().resize({width:2000,height:2000,fit:'inside',withoutEnlargement:true}).jpeg({quality:88,mozjpeg:true}).toBuffer();
+    }
+    const directory=video?'videos':'photos';
+    const extension=video?'mp4':'jpg';
+    fs.mkdirSync(`public/${directory}`,{recursive:true});
+    imagePath=path.join(`public/${directory}`,`${slug}.${extension}`);
     fs.writeFileSync(imagePath,output,{flag:'wx'});
     fs.mkdirSync('content',{recursive:true});
     const file='content/photos.json';
     const photos=fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):[];
-    photos.unshift({title,location,category,url:`/photos/${slug}.jpg`,coordinates:[longitude,latitude]});
+    photos.unshift({title,location,category,type:video?'video':'photo',url:`/${directory}/${slug}.${extension}`,coordinates:[longitude,latitude]});
     const temporary=`${file}.${randomUUID()}.tmp`;
     fs.writeFileSync(temporary,JSON.stringify(photos,null,2)+'\n'); fs.renameSync(temporary,file);
-    revalidatePath('/photos');
-    return NextResponse.json({message:'Photo saved locally and added to the journal and map. Commit and deploy when ready.',url:'/photos'});
+    revalidatePath('/media'); revalidatePath('/photos');
+    return NextResponse.json({message:'Media saved locally. Commit and deploy when ready.',url:'/media'});
   } catch(error) {
     if(imagePath && fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
     return NextResponse.json({error:error instanceof Error?error.message:'Could not save. Please try again.'},{status:400});

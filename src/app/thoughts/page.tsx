@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { getAllThoughts } from '../../lib/thoughts';
 
 export const metadata: Metadata = {
-  title: 'Thoughts',
+  title: 'Writing',
   description: 'Notes by Jeremy Sedillo.',
 };
 
@@ -14,9 +14,9 @@ export default function ThoughtsPage() {
   return (
     <>
       <header className="page-header">
-        <h1>Thoughts</h1>
+        <h1>Writing</h1>
         <p className="eyebrow mt-3">
-          Writing · {thoughts.length} {thoughts.length === 1 ? 'thought' : 'thoughts'}
+          {thoughts.length} {thoughts.length === 1 ? 'post' : 'posts'}
         </p>
       </header>
 
