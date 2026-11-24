@@ -1,36 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function GalleryVideo({ src, title }: { src: string; title: string }) {
   const ref = useRef<HTMLVideoElement>(null);
-  const pinnedSound = useRef(false);
-  const soundRequest = useRef(0);
-  const [audible, setAudible] = useState(false);
 
-  async function enableSound(pin: boolean) {
+  function togglePlayback() {
     const video = ref.current;
     if (!video) return;
-    if (pin) pinnedSound.current = true;
-    const request = ++soundRequest.current;
-    // Only the video being interacted with should make sound.
-    document.querySelectorAll<HTMLVideoElement>('.media-video').forEach(other => {
-      if (other !== video) other.muted = true;
-    });
-    video.muted = false;
-    try { await video.play(); }
-    catch {
-      if (request !== soundRequest.current) return;
-      video.muted = true;
-      pinnedSound.current = false;
-      void video.play().catch(() => {});
-    }
-  }
-
-  function mute() {
-    ++soundRequest.current;
-    pinnedSound.current = false;
-    if (ref.current) ref.current.muted = true;
+    if (video.paused) void video.play().catch(() => {});
+    else video.pause();
   }
 
   useEffect(() => {
@@ -41,10 +20,9 @@ export default function GalleryVideo({ src, title }: { src: string; title: strin
     let manuallyPaused = false;
     let automaticPause = false;
     const sync = () => {
-      if (!visible || document.hidden) mute();
       if (visible && !document.hidden && !reduced.matches && !manuallyPaused) {
         automaticPause = false;
-        void video.play().catch(() => { /* Native controls remain available. */ });
+        void video.play().catch(() => { /* Autoplay may wait for user interaction. */ });
       } else if (!video.paused) {
         automaticPause = true;
         video.pause();
@@ -65,23 +43,19 @@ export default function GalleryVideo({ src, title }: { src: string; title: strin
     };
   }, []);
 
-  return <div className="gallery-video"
-    onPointerEnter={event => { if (event.pointerType === 'mouse') void enableSound(false); }}
-    onPointerLeave={() => { if (!pinnedSound.current) mute(); }}
-  >
-    <video ref={ref} className="media-video" muted loop controls playsInline preload="metadata" aria-label={title}
-      onClick={() => { if (ref.current?.muted) void enableSound(true); else pinnedSound.current = true; }}
-      onVolumeChange={() => {
-        const video = ref.current;
-        setAudible(Boolean(video && !video.muted && video.volume > 0));
-        if (video?.muted) pinnedSound.current = false;
+  return <div className="gallery-video">
+    <video ref={ref} className="media-video" muted loop playsInline preload="metadata" tabIndex={0}
+      aria-label={`${title}. Muted looping video; click or press Space to play or pause.`}
+      onClick={togglePlayback}
+      onKeyDown={event => {
+        if (event.key === ' ' || event.key === 'Enter') {
+          event.preventDefault();
+          togglePlayback();
+        }
       }}
     >
       <source src={src} type="video/mp4" />
       Your browser does not support this video. <a href={src}>Download video</a>
     </video>
-    <button type="button" className="gallery-video-sound" aria-label={`${audible ? 'Mute' : 'Enable sound for'} ${title}`} aria-pressed={audible}
-      onClick={() => { if (audible) mute(); else void enableSound(true); }}
-    >{audible ? 'Sound on' : 'Sound off'}</button>
   </div>;
 }

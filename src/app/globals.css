@@ -1595,5 +1595,3 @@ html { scroll-padding-top: 2rem; scroll-padding-bottom: 6rem; }
 .studio-preview video { display: block; width: 100%; max-height: 70vh; background: #111; }
 
 .gallery-video { position: relative; }
-.gallery-video-sound { position: absolute; top: .65rem; right: .65rem; min-height: 36px; padding: .45rem .7rem; border: 1px solid #ffffff55; border-radius: 4px; background: #181818d9; color: #fff; font-size: .72rem; }
-.gallery-video-sound:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
