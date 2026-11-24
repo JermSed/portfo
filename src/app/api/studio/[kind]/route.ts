@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import sharp from 'sharp';
+import { movToMp4 } from '../../../../lib/studio-video';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { sameOrigin, studioAuthorized, studioEnabled, validToken } from '../../../../lib/studio-auth';
@@ -47,27 +48,28 @@ export async function POST(request: Request, {params}: {params:Promise<{kind:str
     const latitude=Number(text('latitude',30)), longitude=Number(text('longitude',30));
     if(!Number.isFinite(latitude)||!Number.isFinite(longitude)||Math.abs(latitude)>90||Math.abs(longitude)>180) throw new Error('Check the map coordinates.');
     const image=form.get('image');
-    if(!(image instanceof File)||!image.size) throw new Error('Choose a photo or MP4 video.');
-    const video=/\.mp4$/i.test(image.name);
-    if(image.size>(video?100:20)*1024*1024) throw new Error(video?'Choose an MP4 under 100 MB.':'Choose a photo under 20 MB.');
+    if(!(image instanceof File)||!image.size) throw new Error('Choose a photo, MP4, or MOV video.');
+    const mov=/\.mov$/i.test(image.name);
+    const video=/\.(mp4|mov)$/i.test(image.name);
+    if(image.size>(video?100:20)*1024*1024) throw new Error(video?'Choose an MP4 or MOV under 100 MB.':'Choose a photo under 20 MB.');
     const input=Buffer.from(await image.arrayBuffer());
     let output: Buffer;
     if(video) {
       // Check the container, rather than trusting its filename or MIME type.
       const boxSize=input.length>=16?input.readUInt32BE(0):0;
-      const brands=['isom','iso2','iso3','iso4','iso5','iso6','mp41','mp42','avc1','M4V '];
+      const brands=['isom','iso2','iso3','iso4','iso5','iso6','mp41','mp42','avc1','M4V ',...(mov?['qt  ']:[])];
       let compatible=false;
       if(input.toString('ascii',4,8)==='ftyp' && boxSize>=16 && boxSize<=input.length && boxSize<=4096) {
         for(let at=8;at+4<=boxSize;at+=4) {
           if(at!==12 && brands.includes(input.toString('ascii',at,at+4))) compatible=true;
         }
       }
-      if(!compatible) throw new Error('This file is not a supported MP4. Export as an H.264 MP4 and try again.');
-      output=input;
+      if(!compatible) throw new Error('This file is not a supported MP4 or MOV. Export as an H.264 MP4 and try again.');
+      output=mov?await movToMp4(input):input;
     } else {
       const decoder=sharp(input,{limitInputPixels:60000000});
       const metadata=await decoder.metadata();
-      if(!['jpeg','png','webp'].includes(metadata.format||'')) throw new Error('Choose a JPEG, PNG, WebP, or MP4 file.');
+      if(!['jpeg','png','webp'].includes(metadata.format||'')) throw new Error('Choose a JPEG, PNG, WebP, MP4, or MOV file.');
       output=await decoder.rotate().resize({width:2000,height:2000,fit:'inside',withoutEnlargement:true}).jpeg({quality:88,mozjpeg:true}).toBuffer();
     }
     const directory=video?'videos':'photos';
