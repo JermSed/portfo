@@ -1480,7 +1480,7 @@ footer { margin-top: 2rem !important; font-size: .75rem !important; }
 .gallery-header h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 500; letter-spacing: -.04em; }
 .gallery-header p { margin-top: .65rem; font-size: .85rem; color: var(--text-tertiary); }
 .gallery-header > a { font-size: .85rem; white-space: nowrap; }
-.photo-gallery-page .photo-grid { display: block; columns: 2; column-gap: 1.75rem; }
+.photo-gallery-page .photo-grid { display: block; columns: 3; column-gap: 1.75rem; }
 .photo-gallery-page .photo-card { break-inside: avoid; margin: 0 0 2rem; padding: 0; border: 0; background: none; }
 .photo-gallery-page .photo-card-button { border-radius: 0; }
 .photo-gallery-page .photo-card-image { width: 100%; height: auto; aspect-ratio: auto; object-fit: contain; border: 0; border-radius: 0; }
@@ -1491,6 +1491,9 @@ footer { margin-top: 2rem !important; font-size: .75rem !important; }
   .gallery-header { margin-bottom: 2rem; }
   .photo-gallery-page .photo-grid { columns: 1; }
   .photo-gallery-page .photo-card { margin-bottom: 1.75rem; }
+}
+@media (min-width: 601px) and (max-width: 900px) {
+  .photo-gallery-page .photo-grid { columns: 2; }
 }
 
 /* Neutral white palette shared by every page. */
