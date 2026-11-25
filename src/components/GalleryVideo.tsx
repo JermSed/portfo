@@ -5,6 +5,20 @@ import { useEffect, useRef } from 'react';
 export default function GalleryVideo({ src, title }: { src: string; title: string }) {
   const ref = useRef<HTMLVideoElement>(null);
 
+  function toggleSound() {
+    const video = ref.current;
+    if (!video) return;
+    document.querySelectorAll<HTMLVideoElement>('.media-video').forEach(other => {
+      if (other !== video) other.muted = true;
+    });
+    if (video.paused) {
+      video.muted = false;
+      void video.play().catch(() => { video.muted = true; });
+    } else {
+      video.muted = !video.muted;
+    }
+  }
+
   function togglePlayback() {
     const video = ref.current;
     if (!video) return;
@@ -20,6 +34,7 @@ export default function GalleryVideo({ src, title }: { src: string; title: strin
     let manuallyPaused = false;
     let automaticPause = false;
     const sync = () => {
+      if (!visible || document.hidden) video.muted = true;
       if (visible && !document.hidden && !reduced.matches && !manuallyPaused) {
         automaticPause = false;
         void video.play().catch(() => { /* Autoplay may wait for user interaction. */ });
@@ -45,12 +60,15 @@ export default function GalleryVideo({ src, title }: { src: string; title: strin
 
   return <div className="gallery-video">
     <video ref={ref} className="media-video" muted loop playsInline preload="metadata" tabIndex={0}
-      aria-label={`${title}. Muted looping video; click or press Space to play or pause.`}
-      onClick={togglePlayback}
+      aria-label={`${title}. Muted looping video; click or press Enter to toggle sound, Space to play or pause.`}
+      onClick={toggleSound}
       onKeyDown={event => {
-        if (event.key === ' ' || event.key === 'Enter') {
+        if (event.key === ' ') {
           event.preventDefault();
           togglePlayback();
+        } else if (event.key === 'Enter') {
+          event.preventDefault();
+          toggleSound();
         }
       }}
     >
