@@ -44,8 +44,8 @@ export type Photo = {
   title: string;
   location: string;
   url: string;
-  /** [longitude, latitude] of roughly where the photo was taken */
-  coordinates: [number, number];
+  /** [longitude, latitude] of roughly where the photo was taken, when known */
+  coordinates?: [number, number];
   /** What kind of shot it is, drives the pin color on the map */
   category: PhotoCategory;
 };

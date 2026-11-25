@@ -38,7 +38,8 @@ function groupPhotos(items) {
 }
 
 export default function PhotoMap({ items }) {
-  const groups = useMemo(() => groupPhotos(items), [items]);
+  const locatedItems = useMemo(() => items.filter(photo => photo.coordinates), [items]);
+  const groups = useMemo(() => groupPhotos(locatedItems), [locatedItems]);
   const [selected, setSelected] = useState(0);
   const [shot, setShot] = useState(0);
   const [zoom, setZoom] = useState(1);
@@ -46,7 +47,7 @@ export default function PhotoMap({ items }) {
   if (!groups.length) return null;
   const group = groups[selected] || groups[0];
   const index = group.indices[shot] ?? group.indices[0];
-  const photo = items[index];
+  const photo = locatedItems[index];
   const [cx, cy] = project(group.coordinates);
   const w = world.width / zoom;
   const h = world.height / zoom;
@@ -82,6 +83,6 @@ export default function PhotoMap({ items }) {
     </div>
     <div className="atlas-places" aria-label="Choose a photo location">{groups.map((g,i) => <button type="button" key={g.locations[0]} className={toneFor(i)} aria-pressed={selected === i} onClick={() => choose(i)}>{g.locations[0]} <span>{g.indices.length}</span></button>)}</div>
     <p className="atlas-credit">Select a pin or a place to explore. Map data: <a href="https://www.naturalearthdata.com/">Natural Earth</a> · Equal Earth projection</p>
-    {viewer !== null && <Lightbox photos={items} index={viewer} sourceRectFor={noRect} aspectFor={noRect} onIndexChange={setViewer} onClose={() => setViewer(null)} />}
+    {viewer !== null && <Lightbox photos={locatedItems} index={viewer} sourceRectFor={noRect} aspectFor={noRect} onIndexChange={setViewer} onClose={() => setViewer(null)} />}
   </section>;
 }

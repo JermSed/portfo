@@ -1,5 +1,89 @@
 [
   {
+    "title": "Kites Over Lake Union",
+    "location": "Gas Works Park, Seattle, Washington",
+    "category": "nature",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/C0323_00131428.mp4",
+    "coordinates": [
+      -122.3344,
+      47.627
+    ]
+  },
+  {
+    "title": "A Day at Gas Works Park",
+    "location": "Gas Works Park, Seattle, Washington",
+    "category": "nature",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/C0322_00131092.mp4",
+    "coordinates": [
+      -122.3344,
+      47.627
+    ]
+  },
+  {
+    "title": "Seattle from the Water",
+    "location": "Seattle, Washington",
+    "category": "coast",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/C0315_00129159.mp4",
+    "coordinates": [
+      -122.3321,
+      47.6062
+    ]
+  },
+  {
+    "title": "An Evening at the Table",
+    "location": "Location not specified",
+    "category": "city",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/diffgradeforiri00115920.mp4"
+  },
+  {
+    "title": "Downtown Seattle",
+    "location": "Seattle, Washington",
+    "category": "city",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/pikes00140248.mp4",
+    "coordinates": [
+      -122.3348,
+      47.6102
+    ]
+  },
+  {
+    "title": "Market Day",
+    "location": "Pike Place Market, Seattle, Washington",
+    "category": "city",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/pikes00139480.mp4",
+    "coordinates": [
+      -122.3425,
+      47.6093
+    ]
+  },
+  {
+    "title": "Pike Place Market",
+    "location": "Pike Place Market, Seattle, Washington",
+    "category": "city",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/pikes00137356.mp4",
+    "coordinates": [
+      -122.3425,
+      47.6093
+    ]
+  },
+  {
+    "title": "Yosemite Valley",
+    "location": "Yosemite National Park, California",
+    "category": "nature",
+    "type": "video",
+    "url": "https://pub-ddfa6b49c7fc4277827fd326d0b2d7b1.r2.dev/videos/portfovids00503343.mp4",
+    "coordinates": [
+      -119.59,
+      37.745
+    ]
+  },
+  {
     "title": "Kitchen Prep",
     "location": "San Francisco, California",
     "category": "city",
